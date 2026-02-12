@@ -1,0 +1,20 @@
+import express from "express";
+import issuesRouter from "./routes/issues.js";
+// Note this is what the professor refers to as a module
+
+console.log("Initializing the backend...");
+const PORT = process.env.PORT || 3000;
+
+const app = express();
+
+// The .use method is used to serve static files in express
+app.use(express.static("frontend"));
+
+// do a get request for the listings
+// note the 2 parameters the request and the response
+app.use("/api/", issuesRouter);
+
+// This is called BY express
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});

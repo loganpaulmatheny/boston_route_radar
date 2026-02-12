@@ -1,0 +1,35 @@
+{
+  "name": "boston_route_radar",
+  "version": "1.0.0",
+  "description": "An application to enable cities to better track transportation infrastructure issues.",
+  "main": "backend.js",
+  "scripts": {
+    "start": "node ./node_modules/nodemon/bin/nodemon.js backend.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loganpaulmatheny/boston_route_radar.git"
+  },
+  "keywords": [],
+  "author": "Logan Matheny and Pratyusha Jaitly",
+  "license": "MIT",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/loganpaulmatheny/boston_route_radar/issues"
+  },
+  "homepage": "https://github.com/loganpaulmatheny/boston_route_radar#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-jest": "^29.13.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "globals": "^17.3.0",
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.11",
+    "prettier": "^3.8.1"
+  }
+}
