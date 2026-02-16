@@ -47,6 +47,7 @@ function issues() {
   };
 
   const renderIssues = (issuesDiv, issues) => {
+    console.log(issues);
     for (const issue of issues) {
       const {
         issueImage,

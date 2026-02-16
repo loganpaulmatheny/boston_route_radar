@@ -1,5 +1,5 @@
 import express from "express";
-// import MyDB from "../db/MyMongoDB.js";
+import MyDB from "../db/MyMongoDB.js";
 
 const router = express.Router();
 
@@ -10,21 +10,21 @@ const router = express.Router();
 
 // Think of Express as the main server and router as little modules to get to it
 router.get("/issues/", async (req, res) => {
-  // const page = parseInt(req.query.page) || 1;
-  // const pageSize = parseInt(req.query.pageSize) || 20;
-  // const query = {};
-  // console.log("🏡 Received request for /api/listings", {
-  //   page,
-  //   pageSize,
-  //   query,
-  // });
+  const page = parseInt(req.query.page) || 1;
+  const pageSize = parseInt(req.query.pageSize) || 20;
+  const query = {};
+  console.log("🏡 Received request for /api/listings", {
+    page,
+    pageSize,
+    query,
+  });
 
   try {
     console.log("Hello world");
-    // const listings = await MyDB.getListings({ query, pageSize, page });
-    // res.json({
-    //   listings,
-    // });
+    const issues = await MyDB.getListings({ query, pageSize, page });
+    res.json({
+      issues,
+    });
   } catch (error) {
     console.error("Error fetching listings:", error);
     res.status(500).json({ error: "Internal Server Error", listings: [] });
