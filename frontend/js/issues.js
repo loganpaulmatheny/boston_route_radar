@@ -103,9 +103,39 @@ function issues() {
     renderPagination();
   };
 
+  me.addIssue = () => {
+    document
+      .getElementById("new-issue-form")
+      .addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const issue = {
+          issueText: document.getElementById("issue-description").value,
+          category: document.getElementById("category").value,
+          neighborhood: document.getElementById("neighborhood").value,
+        };
+
+        // const res = await fetch("/api/issues", {
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        //   body: JSON.stringify(issue),
+        // });
+
+        // if (res.ok) {
+        //   bootstrap.Modal.getInstance(
+        //     document.getElementById("exampleModal"),
+        //   ).hide();
+        //   myIssues.refreshIssues(); // reload the list
+        // }
+        //
+        console.log(issue);
+      });
+  };
+
   return me;
 }
 
 const myIssues = issues();
 
 myIssues.refreshIssues();
+myIssues.addIssue();
