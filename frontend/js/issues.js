@@ -65,7 +65,11 @@ function issues() {
 
       card.innerHTML = `
     <div class="card-body">
-      <img src="${issueImage}" class="img-fluid rounded mb-2" alt="${issueText}">
+      <img 
+        src="${issueImage}" 
+        class="img-fluid rounded mb-2" 
+        alt="${issueText}" 
+        style="height: 180px; width: 180px; object-fit: cover;">
       <span class="badge bg-secondary mb-2">${category}</span>
       <h3 class="h5">${neighborhood}</h3>
       <p class="card-text">${issueText}</p>
