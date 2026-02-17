@@ -123,28 +123,29 @@ function issues() {
         modal.show();
       });
 
-      me.setupUpdateListener = () => {
-        const updateForm = document.getElementById("update-issue-form");
-
-        updateForm.addEventListener("submit", async (e) => {
-          e.preventDefault(); // stop the refresh
-
-          // grab the NEW values from the modal inputs
-          const id = document.getElementById("update-issue-id").value;
-
-          const updatedData = {
-            issueText: document.getElementById("update-description").value,
-            category: document.getElementById("update-category").value,
-            neighborhood: document.getElementById("update-neighborhood").value,
-          };
-
-          // pass the ID and the OBJECT to your method
-          await me.updateIssue(id, updatedData);
-        });
-      };
-
       issuesDiv.appendChild(card);
     }
+  };
+
+  me.setupUpdateListener = () => {
+    const updateForm = document.getElementById("update-issue-form");
+
+    updateForm.addEventListener("submit", async (e) => {
+      e.preventDefault(); // stop the refresh
+      // console.log("getting here");
+
+      // grab the NEW values from the modal inputs
+      const id = document.getElementById("update-issue-id").value;
+
+      const updatedData = {
+        issueText: document.getElementById("update-description").value,
+        category: document.getElementById("update-category").value,
+        neighborhood: document.getElementById("update-neighborhood").value,
+      };
+
+      // pass the ID and the OBJECT to your method
+      await me.updateIssue(id, updatedData);
+    });
   };
 
   me.refreshIssues = async () => {
@@ -235,51 +236,34 @@ function issues() {
     }
   };
 
-  me.updateIssue = () => {
-    const updateForm = document.getElementById("update-issue-form");
+  me.updateIssue = async (id, updatedData) => {
+    try {
+      // console.log(issue);
+      const res = await fetch(`/api/issues/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedData),
+      });
 
-    updateForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+      if (res.ok) {
+        // hide the modal
+        const updateModal = document.getElementById("updateModal");
+        // console.log(issueModal);
+        // TODO: should we do this? what is the risk
+        const modal = window.bootstrap.Modal.getInstance(updateModal);
+        // console.log(modal);
+        if (modal) modal.hide();
 
-      const issue = {
-        issueText: document.getElementById("update-description").value,
-        category: document.getElementById("update-category").value,
-        neighborhood: document.getElementById("update-neighborhood").value,
-        reportedBy: "testUser",
-        // TODO: This should probably change once introducing ability to store images
-        issueImage:
-          "https://images.unsplash.com/photo-1561826791-4e15074d6782?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      };
+        // Clear the form
 
-      try {
-        // console.log(issue);
-        const res = await fetch("/api/issues", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(issue),
-        });
-        // console.log("getting here");
-
-        if (res.ok) {
-          // hide the modal
-          const updateModal = document.getElementById("update-modal");
-          // console.log(issueModal);
-          // TODO: should we do this? what is the risk
-          const modal = window.bootstrap.Modal.getInstance(updateModal);
-          // console.log(modal);
-          if (modal) modal.hide();
-
-          // Clear the form
-
-          // refresh the list
-          me.refreshIssues();
-        } else {
-          alert("Failed to save issue");
-        }
-      } catch (err) {
-        console.error("Error posting issue:", err);
+        // refresh the list
+        me.refreshIssues();
+      } else {
+        alert("Failed to save issue");
       }
-    });
+    } catch (err) {
+      console.error("Error posting issue:", err);
+    }
   };
 
   return me;
@@ -289,3 +273,4 @@ const myIssues = issues();
 
 myIssues.refreshIssues();
 myIssues.addIssue();
+myIssues.setupUpdateListener();

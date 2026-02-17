@@ -13,7 +13,7 @@ router.get("/issues/", async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const pageSize = parseInt(req.query.pageSize) || 20;
   const query = {};
-  console.log("🏡 Received request for /api/listings", {
+  console.log("🏡 Received request for /api/issues", {
     page,
     pageSize,
     query,
@@ -26,7 +26,7 @@ router.get("/issues/", async (req, res) => {
       issues,
     });
   } catch (error) {
-    console.error("Error fetching listings:", error);
+    console.error("Error fetching issues:", error);
     res.status(500).json({ error: "Internal Server Error", listings: [] });
   }
 });
@@ -76,8 +76,9 @@ router.put("/issues/:id", async (req, res) => {
   const updatedData = req.body;
 
   try {
-    const result = await MyDB.updateIssue(issueId, updatedData);
+    const result = await MyDB.updateIssueDB(issueId, updatedData);
     res.json({ message: "Update successful", result });
+    console.log(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

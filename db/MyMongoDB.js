@@ -63,27 +63,24 @@ function MyMongoDB({
     }
   };
 
-  me.updateIssue = async (issueId, updatedData) => {
+  me.updateIssueDB = async (issueId, updatedData) => {
+    const { client, issues } = connect();
     try {
-      const res = await fetch(`/api/issues/${issueId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedData),
-      });
+      const filter = { _id: new ObjectId(issueId) };
+      const updateDoc = {
+        $set: {
+          ...updatedData,
+          modifiedAt: new Date(),
+        },
+      };
 
-      if (res.ok) {
-        // close the modal
-        const upModal = document.getElementById("updateModal");
-        const modalInstance = window.bootstrap.Modal.getInstance(upModal);
-        if (modalInstance) modalInstance.hide();
-
-        // Refresh the UI
-        me.refreshIssues();
-      } else {
-        alert("Failed to update issue on the server.");
-      }
+      const result = await issues.updateOne(filter, updateDoc);
+      return result;
     } catch (err) {
-      console.error("Network error during update:", err);
+      console.error("MongoDB Update Error:", err);
+      throw err;
+    } finally {
+      await client.close();
     }
   };
   return me;
