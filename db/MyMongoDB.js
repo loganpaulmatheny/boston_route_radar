@@ -1,4 +1,4 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
 function MyMongoDB({
   dbName = "boston-route-radar",
@@ -22,6 +22,7 @@ function MyMongoDB({
     try {
       const data = await issues
         .find(query)
+        .sort({ modifiedAt: -1 })
         .limit(pageSize)
         .skip(pageSize * (page - 1))
         .toArray();
@@ -42,6 +43,20 @@ function MyMongoDB({
       return result;
     } catch (err) {
       console.error("Error inserting issue into MongoDB", err);
+      throw err;
+    } finally {
+      await client.close();
+    }
+  };
+
+  me.removeIssue = async (issueId) => {
+    const { client, issues } = connect();
+    try {
+      const filter = { _id: new ObjectId(issueId) };
+      const result = await issues.deleteOne(filter);
+      return result;
+    } catch (err) {
+      console.error("Error deleting issue from the DB", err);
       throw err;
     } finally {
       await client.close();
