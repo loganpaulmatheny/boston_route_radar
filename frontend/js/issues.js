@@ -76,13 +76,13 @@ function issues() {
       <p class="reported-by">${reportedBy}</p>
       <div class="d-flex justify-content-between align-items-center">
         <small class="text-muted">Status: <strong>${status}</strong></small>
-        <small class="text-muted">Last Updated: ${modifiedAt}</small>
+        <small class="text-muted">Last Updated: ${modifiedAt}</small> 
+        <button class="btn btn-info">Info</button>
         <button class="btn btn-sm btn-danger btn-delete">Delete</button>
       </div>
     </div>
   `;
 
-      // Inside renderIssues loop...
       const deleteBtn = card.querySelector(".btn-delete");
 
       deleteBtn.addEventListener("click", async () => {
@@ -96,6 +96,30 @@ function issues() {
         }
       });
 
+      const updateBtn = card.querySelector(".btn-info");
+
+      updateBtn.addEventListener("click", () => {
+        const idInput = document.getElementById("update-issue-id");
+        const descInput = document.getElementById("update-description");
+        const catInput = document.getElementById("update-category");
+        const upModal = document.getElementById("updateModal");
+
+        // if any attributes are null don't try to render
+        if (!idInput || !upModal) {
+          console.error("Oops! Could not find the modal elements in the DOM.");
+          return;
+        }
+
+        // fill the modal
+        idInput.value = _id;
+        descInput.value = issueText;
+        catInput.value = category;
+        // TODO: What info is not on the card that should be
+
+        // Use 'new' keyword and pass the element
+        const modal = new window.bootstrap.Modal(upModal);
+        modal.show();
+      });
       issuesDiv.appendChild(card);
     }
   };
@@ -184,8 +208,55 @@ function issues() {
         alert("Failed to delete issue");
       }
     } catch (err) {
-      console.error("Error posting issue:", err);
+      console.error("Error deleting issue:", err);
     }
+  };
+
+  me.updateIssue = () => {
+    const updateForm = document.getElementById("update-issue-form");
+
+    updateForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const issue = {
+        issueText: document.getElementById("issue-description").value,
+        category: document.getElementById("category").value,
+        neighborhood: document.getElementById("neighborhood").value,
+        reportedBy: "testUser",
+        issueImage:
+          "https://images.unsplash.com/photo-1561826791-4e15074d6782?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      };
+
+      try {
+        // console.log(issue);
+        const res = await fetch("/api/issues", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(issue),
+        });
+        // console.log("getting here");
+
+        if (res.ok) {
+          // hide the modal
+          const issueModal = document.getElementById("issue-modal");
+          // console.log(issueModal);
+          // TODO: should we do this? what is the risk
+          const modal = window.bootstrap.Modal.getInstance(issueModal);
+          // console.log(modal);
+          if (modal) modal.hide();
+
+          // Clear the form
+          issueForm.reset();
+
+          // refresh the list
+          me.refreshIssues();
+        } else {
+          alert("Failed to save issue");
+        }
+      } catch (err) {
+        console.error("Error posting issue:", err);
+      }
+    });
   };
 
   return me;
