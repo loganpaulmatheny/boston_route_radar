@@ -11,16 +11,16 @@ function MyMongoDB({
   const connect = () => {
     console.log("Connecting to MongoDB at", URI);
     const client = new MongoClient(URI);
-    const listings = client.db(dbName).collection(collectionName);
+    const issues = client.db(dbName).collection(collectionName);
 
-    return { client, listings };
+    return { client, issues };
   };
 
-  me.getListings = async ({ query = {}, pageSize = 20, page = 1 } = {}) => {
-    const { client, listings } = connect();
+  me.getIssues = async ({ query = {}, pageSize = 20, page = 1 } = {}) => {
+    const { client, issues } = connect();
 
     try {
-      const data = await listings
+      const data = await issues
         .find(query)
         .limit(pageSize)
         .skip(pageSize * (page - 1))
@@ -29,6 +29,19 @@ function MyMongoDB({
       return data;
     } catch (err) {
       console.error("Error fetching issues from MongoDB", err);
+      throw err;
+    } finally {
+      await client.close();
+    }
+  };
+
+  me.createIssue = async (issue) => {
+    const { client, issues } = connect();
+    try {
+      const result = await issues.insertOne(issue);
+      return result;
+    } catch (err) {
+      console.error("Error inserting issue into MongoDB", err);
       throw err;
     } finally {
       await client.close();

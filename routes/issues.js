@@ -21,13 +21,35 @@ router.get("/issues/", async (req, res) => {
 
   try {
     console.log("Hello world");
-    const issues = await MyDB.getListings({ query, pageSize, page });
+    const issues = await MyDB.getIssues({ query, pageSize, page });
     res.json({
       issues,
     });
   } catch (error) {
     console.error("Error fetching listings:", error);
     res.status(500).json({ error: "Internal Server Error", listings: [] });
+  }
+});
+
+// POST: Create a new issue
+router.post("/issues/", async (req, res) => {
+  console.log(req.body);
+  try {
+    const newIssue = {
+      ...req.body,
+      status: "Open", // Default status
+      createdAt: new Date(), // Important for sorting
+      modifiedAt: new Date(),
+      comments: [],
+      likes: 0,
+    };
+    console.log(newIssue);
+    const result = await MyDB.createIssue(newIssue);
+    console.log(result);
+    res.status(201).json(result);
+    console.log("success");
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
