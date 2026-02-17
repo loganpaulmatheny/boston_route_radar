@@ -63,6 +63,29 @@ function MyMongoDB({
     }
   };
 
+  me.updateIssue = async (issueId, updatedData) => {
+    try {
+      const res = await fetch(`/api/issues/${issueId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (res.ok) {
+        // close the modal
+        const upModal = document.getElementById("updateModal");
+        const modalInstance = window.bootstrap.Modal.getInstance(upModal);
+        if (modalInstance) modalInstance.hide();
+
+        // Refresh the UI
+        me.refreshIssues();
+      } else {
+        alert("Failed to update issue on the server.");
+      }
+    } catch (err) {
+      console.error("Network error during update:", err);
+    }
+  };
   return me;
 }
 

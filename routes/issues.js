@@ -53,6 +53,7 @@ router.post("/issues/", async (req, res) => {
   }
 });
 
+// DELETE: Delete the issue
 router.delete("/issues/:id", async (req, res) => {
   const issueId = req.params.id;
   try {
@@ -63,6 +64,20 @@ router.delete("/issues/:id", async (req, res) => {
     } else {
       res.status(404).json({ error: "Issue not found" });
     }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// PUT: Update the issue
+// TODO: Start back here and fix this
+router.put("/issues/:id", async (req, res) => {
+  const issueId = req.params.id;
+  const updatedData = req.body;
+
+  try {
+    const result = await MyDB.updateIssue(issueId, updatedData);
+    res.json({ message: "Update successful", result });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

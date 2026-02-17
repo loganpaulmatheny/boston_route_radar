@@ -98,13 +98,14 @@ function issues() {
 
       const updateBtn = card.querySelector(".btn-info");
 
-      updateBtn.addEventListener("click", () => {
+      updateBtn.addEventListener("click", async () => {
         const idInput = document.getElementById("update-issue-id");
         const descInput = document.getElementById("update-description");
         const catInput = document.getElementById("update-category");
+        const neighInput = document.getElementById("update-neighborhood");
         const upModal = document.getElementById("updateModal");
 
-        // if any attributes are null don't try to render
+        // if it doesn't have an ID or the modal
         if (!idInput || !upModal) {
           console.error("Oops! Could not find the modal elements in the DOM.");
           return;
@@ -114,12 +115,34 @@ function issues() {
         idInput.value = _id;
         descInput.value = issueText;
         catInput.value = category;
+        neighInput.value = neighborhood;
         // TODO: What info is not on the card that should be
 
         // Use 'new' keyword and pass the element
         const modal = new window.bootstrap.Modal(upModal);
         modal.show();
       });
+
+      me.setupUpdateListener = () => {
+        const updateForm = document.getElementById("update-issue-form");
+
+        updateForm.addEventListener("submit", async (e) => {
+          e.preventDefault(); // stop the refresh
+
+          // grab the NEW values from the modal inputs
+          const id = document.getElementById("update-issue-id").value;
+
+          const updatedData = {
+            issueText: document.getElementById("update-description").value,
+            category: document.getElementById("update-category").value,
+            neighborhood: document.getElementById("update-neighborhood").value,
+          };
+
+          // pass the ID and the OBJECT to your method
+          await me.updateIssue(id, updatedData);
+        });
+      };
+
       issuesDiv.appendChild(card);
     }
   };
@@ -219,10 +242,11 @@ function issues() {
       e.preventDefault();
 
       const issue = {
-        issueText: document.getElementById("issue-description").value,
-        category: document.getElementById("category").value,
-        neighborhood: document.getElementById("neighborhood").value,
+        issueText: document.getElementById("update-description").value,
+        category: document.getElementById("update-category").value,
+        neighborhood: document.getElementById("update-neighborhood").value,
         reportedBy: "testUser",
+        // TODO: This should probably change once introducing ability to store images
         issueImage:
           "https://images.unsplash.com/photo-1561826791-4e15074d6782?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       };
@@ -230,7 +254,7 @@ function issues() {
       try {
         // console.log(issue);
         const res = await fetch("/api/issues", {
-          method: "POST",
+          method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(issue),
         });
@@ -238,15 +262,14 @@ function issues() {
 
         if (res.ok) {
           // hide the modal
-          const issueModal = document.getElementById("issue-modal");
+          const updateModal = document.getElementById("update-modal");
           // console.log(issueModal);
           // TODO: should we do this? what is the risk
-          const modal = window.bootstrap.Modal.getInstance(issueModal);
+          const modal = window.bootstrap.Modal.getInstance(updateModal);
           // console.log(modal);
           if (modal) modal.hide();
 
           // Clear the form
-          issueForm.reset();
 
           // refresh the list
           me.refreshIssues();
