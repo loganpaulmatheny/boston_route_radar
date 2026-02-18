@@ -6,6 +6,7 @@ console.log("Initializing the backend...");
 const PORT = process.env.PORT || 3000;
 
 const app = express();
+app.use(express.json());
 
 // The .use method is used to serve static files in express
 app.use(express.static("frontend"));

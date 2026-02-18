@@ -22,6 +22,117 @@
           <div class="row">
             <div class="col-8">
               <h2>Ongoing Issues</h2>
+
+              <!-- Button trigger modal -->
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#issue-modal"
+              >
+                Add Issue
+              </button>
+
+              <!-- Modal -->
+              <!-->TO DO: Fix anything that is template </!-->
+              <div
+                class="modal fade"
+                id="issue-modal"
+                tabindex="-1"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">
+                        Add Issue
+                      </h1>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+
+                    <form id="new-issue-form">
+                      <div class="modal-body">
+                        <div class="mb-3">
+                          <label for="issue-description" class="col-form-label"
+                            >Issue Description</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="issue-description"
+                          />
+                        </div>
+                        <div class="mb-3">
+                          <label for="category" class="form-label"
+                            >Category</label
+                          >
+                          <select id="category" class="form-select">
+                            <option value="">Select a neighborhood</option>
+                            <option>Train</option>
+                            <option>Bus</option>
+                            <option>Bike</option>
+                            <option>Pedestrian</option>
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                          <label for="neighborhood" class="form-label"
+                            >Neighborhood</label
+                          >
+                          <select id="neighborhood" class="form-select">
+                            <option value="">Select a neighborhood</option>
+                            <option>Allston</option>
+                            <option>Back Bay</option>
+                            <option>Bay Village</option>
+                            <option>Beacon Hill</option>
+                            <option>Brighton</option>
+                            <option>Charlestown</option>
+                            <option>Chinatown–Leather District</option>
+                            <option>Dorchester</option>
+                            <option>Downtown</option>
+                            <option>East Boston</option>
+                            <option>Fenway–Kenmore</option>
+                            <option>Hyde Park</option>
+                            <option>Jamaica Plain</option>
+                            <option>Mattapan</option>
+                            <option>Mid-Dorchester</option>
+                            <option>Mission Hill</option>
+                            <option>North End</option>
+                            <option>Roslindale</option>
+                            <option>Roxbury</option>
+                            <option>South Boston</option>
+                            <option>South End</option>
+                            <option>West End</option>
+                            <option>West Roxbury</option>
+                            <option>Wharf District</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Close
+                        </button>
+                        <button
+                          id="submit-issue"
+                          type="submit"
+                          class="btn btn-primary"
+                        >
+                          Submit
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
               <div id="issues">/* This is where the issues will populate*/</div>
               <nav aria-label="Page navigation example">
                 <ul class="pagination" id="pagination"></ul>
