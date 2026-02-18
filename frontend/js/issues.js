@@ -6,7 +6,7 @@ function issues() {
   const pageSize = parseInt(params.get("pageSize")) || 20;
   const query = params.get("query") || "";
 
-  console.log("issue params:", { page, pageSize, query });
+  // console.log("issue params:", { page, pageSize, query });
 
   me.showError = ({ msg, res, type = "danger" } = {}) => {
     // Show an error using bootstrap alerts in the main tag
@@ -47,34 +47,54 @@ function issues() {
   };
 
   const renderIssues = (issuesDiv, issues) => {
-    console.log(issues);
+    // console.log(issues);
     for (const issue of issues) {
       const {
+        _id,
         issueImage,
         issueText,
         category,
         neighborhood,
         status,
         reportedBy,
-        lastUpdated,
+        modifiedAt,
       } = issue;
       const card = document.createElement("div");
       card.className = "card mb-3";
+      card.dataset.id = _id;
 
       card.innerHTML = `
     <div class="card-body">
-      <img src="${issueImage}" class="img-fluid rounded mb-2" alt="${issueText}">
+      <img 
+        src="${issueImage}" 
+        class="img-fluid rounded mb-2" 
+        alt="${issueText}" 
+        style="height: 180px; width: 180px; object-fit: cover;">
       <span class="badge bg-secondary mb-2">${category}</span>
       <h3 class="h5">${neighborhood}</h3>
       <p class="card-text">${issueText}</p>
       <p class="reported-by">${reportedBy}</p>
       <div class="d-flex justify-content-between align-items-center">
         <small class="text-muted">Status: <strong>${status}</strong></small>
-        <small class="text-muted">Last Updated: ${lastUpdated}</small>
-        <button class="btn btn-sm btn-outline-primary">More Info</button>
+        <small class="text-muted">Last Updated: ${modifiedAt}</small>
+        <button class="btn btn-sm btn-danger btn-delete">Delete</button>
       </div>
     </div>
   `;
+
+      // Inside renderIssues loop...
+      const deleteBtn = card.querySelector(".btn-delete");
+
+      deleteBtn.addEventListener("click", async () => {
+        const confirmDelete = confirm(
+          "Are you sure you want to delete this issue?",
+        );
+
+        if (confirmDelete) {
+          // Call the method via the 'me' object to ensure it's in scope
+          await me.deleteIssue(_id);
+        }
+      });
 
       issuesDiv.appendChild(card);
     }
@@ -93,7 +113,7 @@ function issues() {
 
     const data = await res.json();
 
-    console.log("Fetched issues", data);
+    // console.log("Fetched issues", data);
 
     const issuesDiv = document.getElementById("issues");
 
@@ -119,21 +139,21 @@ function issues() {
       };
 
       try {
-        console.log(issue);
+        // console.log(issue);
         const res = await fetch("/api/issues", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(issue),
         });
-        console.log("getting here");
+        // console.log("getting here");
 
         if (res.ok) {
           // hide the modal
           const issueModal = document.getElementById("issue-modal");
-          console.log(issueModal);
+          // console.log(issueModal);
           // TODO: should we do this? what is the risk
           const modal = window.bootstrap.Modal.getInstance(issueModal);
-          console.log(modal);
+          // console.log(modal);
           if (modal) modal.hide();
 
           // Clear the form
@@ -148,6 +168,24 @@ function issues() {
         console.error("Error posting issue:", err);
       }
     });
+  };
+
+  me.deleteIssue = async (id) => {
+    try {
+      const res = await fetch(`/api/issues/${id}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        // TODO: I could change the color of the button
+
+        me.refreshIssues();
+      } else {
+        alert("Failed to delete issue");
+      }
+    } catch (err) {
+      console.error("Error posting issue:", err);
+    }
   };
 
   return me;
