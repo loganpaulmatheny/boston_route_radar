@@ -59,31 +59,36 @@ function issues() {
         reportedBy,
         modifiedAt,
       } = issue;
-      const card = document.createElement("div");
-      card.className = "card mb-3";
-      card.dataset.id = _id;
+      const issueCard = document.createElement("div");
+      issueCard.className = "col-md-3 mb-3";
+      issueCard.dataset.id = _id;
 
-      card.innerHTML = `
-    <div class="card-body">
-      <img 
-        src="${issueImage}" 
-        class="img-fluid rounded mb-2" 
-        alt="${issueText}" 
-        style="height: 180px; width: 180px; object-fit: cover;">
-      <span class="badge bg-secondary mb-2">${category}</span>
-      <h3 class="h5">${neighborhood}</h3>
-      <p class="card-text">${issueText}</p>
-      <p class="reported-by">${reportedBy}</p>
-      <div class="d-flex justify-content-between align-items-center">
-        <small class="text-muted">Status: <strong>${status}</strong></small>
-        <small class="text-muted">Last Updated: ${modifiedAt}</small> 
-        <button class="btn btn-info">Info</button>
-        <button class="btn btn-sm btn-danger btn-delete">Delete</button>
+      issueCard.innerHTML = `
+    <div class="card h-100">  
+      <div class="card-body">
+        <img 
+          src="${issueImage}" 
+          class="img-fluid rounded mb-2" 
+          alt="${issueText}" 
+          style="height: 180px; width: 180px; object-fit: cover;">
+        <span class="badge bg-secondary mb-2">${category}</span>
+        <h3 class="h5">${neighborhood}</h3>
+        <p class="card-text">${issueText}</p>
+        <p class="reported-by">${reportedBy}</p>
+        <div class="status-section">
+          <p class="text-muted">Status: <strong>${status}</strong></p>
+          <small class="text-muted">Last Updated: ${modifiedAt}</small> 
+          <br>
+          <div class="d-flex justify-content-center align-items-center">
+            <button class="btn btn-info m-3">Info</button>
+            <button class="btn btn-sm btn-danger btn-delete m-3">Delete</button>
+          </div>
+        </div>
       </div>
     </div>
   `;
 
-      const deleteBtn = card.querySelector(".btn-delete");
+      const deleteBtn = issueCard.querySelector(".btn-delete");
 
       deleteBtn.addEventListener("click", async () => {
         const confirmDelete = confirm(
@@ -96,7 +101,7 @@ function issues() {
         }
       });
 
-      const updateBtn = card.querySelector(".btn-info");
+      const updateBtn = issueCard.querySelector(".btn-info");
 
       updateBtn.addEventListener("click", async () => {
         const idInput = document.getElementById("update-issue-id");
@@ -123,7 +128,7 @@ function issues() {
         modal.show();
       });
 
-      issuesDiv.appendChild(card);
+      issuesDiv.appendChild(issueCard);
     }
   };
 
@@ -163,7 +168,7 @@ function issues() {
 
     // console.log("Fetched issues", data);
 
-    const issuesDiv = document.getElementById("issues");
+    const issuesDiv = document.getElementById("issues-row");
 
     issuesDiv.innerHTML = "";
 
