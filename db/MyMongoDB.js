@@ -6,7 +6,8 @@ function MyMongoDB({
   defaultUri = "mongodb://localhost:27017",
 } = {}) {
   const me = {};
-  const URI = process.env.MONGODB_URI || defaultUri;
+  // const URI = process.env.MONGODB_URI || defaultUri;
+  const URI = process.env.MONGODB_URI;
 
   const connect = () => {
     console.log("Connecting to MongoDB at", URI);
