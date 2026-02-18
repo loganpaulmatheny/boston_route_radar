@@ -76,13 +76,13 @@ function issues() {
       <p class="reported-by">${reportedBy}</p>
       <div class="d-flex justify-content-between align-items-center">
         <small class="text-muted">Status: <strong>${status}</strong></small>
-        <small class="text-muted">Last Updated: ${modifiedAt}</small>
+        <small class="text-muted">Last Updated: ${modifiedAt}</small> 
+        <button class="btn btn-info">Info</button>
         <button class="btn btn-sm btn-danger btn-delete">Delete</button>
       </div>
     </div>
   `;
 
-      // Inside renderIssues loop...
       const deleteBtn = card.querySelector(".btn-delete");
 
       deleteBtn.addEventListener("click", async () => {
@@ -96,8 +96,56 @@ function issues() {
         }
       });
 
+      const updateBtn = card.querySelector(".btn-info");
+
+      updateBtn.addEventListener("click", async () => {
+        const idInput = document.getElementById("update-issue-id");
+        const descInput = document.getElementById("update-description");
+        const catInput = document.getElementById("update-category");
+        const neighInput = document.getElementById("update-neighborhood");
+        const upModal = document.getElementById("updateModal");
+
+        // if it doesn't have an ID or the modal
+        if (!idInput || !upModal) {
+          console.error("Oops! Could not find the modal elements in the DOM.");
+          return;
+        }
+
+        // fill the modal
+        idInput.value = _id;
+        descInput.value = issueText;
+        catInput.value = category;
+        neighInput.value = neighborhood;
+        // TODO: What info is not on the card that should be
+
+        // Use 'new' keyword and pass the element
+        const modal = new window.bootstrap.Modal(upModal);
+        modal.show();
+      });
+
       issuesDiv.appendChild(card);
     }
+  };
+
+  me.setupUpdateListener = () => {
+    const updateForm = document.getElementById("update-issue-form");
+
+    updateForm.addEventListener("submit", async (e) => {
+      e.preventDefault(); // stop the refresh
+      // console.log("getting here");
+
+      // grab the NEW values from the modal inputs
+      const id = document.getElementById("update-issue-id").value;
+
+      const updatedData = {
+        issueText: document.getElementById("update-description").value,
+        category: document.getElementById("update-category").value,
+        neighborhood: document.getElementById("update-neighborhood").value,
+      };
+
+      // pass the ID and the OBJECT to your method
+      await me.updateIssue(id, updatedData);
+    });
   };
 
   me.refreshIssues = async () => {
@@ -184,6 +232,36 @@ function issues() {
         alert("Failed to delete issue");
       }
     } catch (err) {
+      console.error("Error deleting issue:", err);
+    }
+  };
+
+  me.updateIssue = async (id, updatedData) => {
+    try {
+      // console.log(issue);
+      const res = await fetch(`/api/issues/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (res.ok) {
+        // hide the modal
+        const updateModal = document.getElementById("updateModal");
+        // console.log(issueModal);
+        // TODO: should we do this? what is the risk
+        const modal = window.bootstrap.Modal.getInstance(updateModal);
+        // console.log(modal);
+        if (modal) modal.hide();
+
+        // Clear the form
+
+        // refresh the list
+        me.refreshIssues();
+      } else {
+        alert("Failed to save issue");
+      }
+    } catch (err) {
       console.error("Error posting issue:", err);
     }
   };
@@ -195,3 +273,4 @@ const myIssues = issues();
 
 myIssues.refreshIssues();
 myIssues.addIssue();
+myIssues.setupUpdateListener();

@@ -133,6 +133,82 @@
                   </div>
                 </div>
               </div>
+              <div class="modal fade" id="updateModal" tabindex="-1">
+                <div class="modal-dialog">
+                  <form id="update-issue-form" class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Update Issue</h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      <input type="hidden" id="update-issue-id" />
+
+                      <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <input
+                          class="form-control"
+                          id="update-description"
+                          required
+                        />
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="update-category" class="form-label"
+                          >Category</label
+                        >
+                        <select id="update-category" class="form-select">
+                          <option value="">Select a neighborhood</option>
+                          <option>Train</option>
+                          <option>Bus</option>
+                          <option>Bike</option>
+                          <option>Pedestrian</option>
+                        </select>
+                      </div>
+                      <div class="mb-3">
+                        <label for="update-neighborhood" class="form-label"
+                          >Neighborhood</label
+                        >
+                        <select id="update-neighborhood" class="form-select">
+                          <option value="">Select a neighborhood</option>
+                          <option>Allston</option>
+                          <option>Back Bay</option>
+                          <option>Bay Village</option>
+                          <option>Beacon Hill</option>
+                          <option>Brighton</option>
+                          <option>Charlestown</option>
+                          <option>Chinatown–Leather District</option>
+                          <option>Dorchester</option>
+                          <option>Downtown</option>
+                          <option>East Boston</option>
+                          <option>Fenway–Kenmore</option>
+                          <option>Hyde Park</option>
+                          <option>Jamaica Plain</option>
+                          <option>Mattapan</option>
+                          <option>Mid-Dorchester</option>
+                          <option>Mission Hill</option>
+                          <option>North End</option>
+                          <option>Roslindale</option>
+                          <option>Roxbury</option>
+                          <option>South Boston</option>
+                          <option>South End</option>
+                          <option>West End</option>
+                          <option>West Roxbury</option>
+                          <option>Wharf District</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary">
+                        Save Changes
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
               <div id="issues">/* This is where the issues will populate*/</div>
               <nav aria-label="Page navigation example">
                 <ul class="pagination" id="pagination"></ul>

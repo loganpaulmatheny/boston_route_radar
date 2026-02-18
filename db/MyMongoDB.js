@@ -63,6 +63,26 @@ function MyMongoDB({
     }
   };
 
+  me.updateIssueDB = async (issueId, updatedData) => {
+    const { client, issues } = connect();
+    try {
+      const filter = { _id: new ObjectId(issueId) };
+      const updateDoc = {
+        $set: {
+          ...updatedData,
+          modifiedAt: new Date(),
+        },
+      };
+
+      const result = await issues.updateOne(filter, updateDoc);
+      return result;
+    } catch (err) {
+      console.error("MongoDB Update Error:", err);
+      throw err;
+    } finally {
+      await client.close();
+    }
+  };
   return me;
 }
 
