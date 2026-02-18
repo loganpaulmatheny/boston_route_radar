@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Boston Route Radar</title>
-    <link href="css/style.css" rel="stylesheet" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -18,9 +17,22 @@
       <header>
         <h1>Boston Route Radar</h1>
       </header>
+      <main>
+        <section>
+          <div class="row">
+            <div class="col-8">
+              <h2>Ongoing Issues</h2>
+              <div id="issues">/* This is where the issues will populate*/</div>
+              <nav aria-label="Page navigation example">
+                <ul class="pagination" id="pagination"></ul>
+              </nav>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
 
-    <script type="module" src="./js/frontend.js"></script>
+    <script type="module" src="./js/issues.js"></script>
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
