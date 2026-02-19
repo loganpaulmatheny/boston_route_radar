@@ -62,12 +62,48 @@ router.post("/admin/seed-projects", async (req, res) => {
         .json({ error: "data/projects.json must contain a JSON array" });
     }
 
+    const normalizeStatus = (s) => {
+      const v = String(s || "")
+        .trim()
+        .toLowerCase();
+      if (v === "planned") return "planned";
+      if (v === "in progress" || v === "in_progress") return "in_progress";
+      if (v === "completed") return "completed";
+      return "planned";
+    };
+
     const now = new Date();
-    const docs = projects.map((p) => ({
-      ...p,
-      createdAt: p.createdAt ? new Date(p.createdAt) : now,
-      modifiedAt: p.modifiedAt ? new Date(p.modifiedAt) : now,
-    }));
+
+    const docs = projects.map((p) => {
+      const createdAt = p.createdAt ? new Date(p.createdAt) : now;
+      const modifiedAt = p.lastUpdated
+        ? new Date(p.lastUpdated)
+        : p.modifiedAt
+          ? new Date(p.modifiedAt)
+          : now;
+
+      const doc = {
+        ...(typeof p._id === "string" && /^[a-fA-F0-9]{24}$/.test(p._id)
+          ? { _id: new ObjectId(p._id) }
+          : {}),
+
+        title: p.title || p.projectText || "",
+        neighborhoods: Array.isArray(p.neighborhoods)
+          ? p.neighborhoods
+          : p.neighborhood
+            ? [p.neighborhood]
+            : [],
+
+        status: normalizeStatus(p.status || p.Status),
+        estCompletion: p.estCompletion || p.estimatedCompletionDate || "",
+        imageUrl: p.imageUrl || p.projectPicture || "",
+
+        createdAt,
+        modifiedAt,
+      };
+
+      return doc;
+    });
 
     const result = await db
       .collection(PROJECTS_COLLECTION)

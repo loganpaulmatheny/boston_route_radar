@@ -99,24 +99,78 @@ async function main() {
   let chip = "all";
   let pendingDeleteId = null;
 
-  async function refresh() {
-    const data = await getProjects();
-    allProjects = data.projects || [];
+  const overlay = document.getElementById("loading-overlay");
+  const overlayText = document.getElementById("loading-text");
+  const gridLoading = document.getElementById("grid-loading");
 
-    fillNeighborhoodDropdown(hoodEl, allProjects);
+  let overlayCount = 0;
 
-    const filtered = filterProjects(allProjects, {
-      q: searchEl.value,
-      neighborhood: hoodEl.value,
-      status: statusEl.value,
-      chip,
-    });
-
-    renderProjects(grid, filtered);
-
-    if (filtered.length === 0) empty.classList.remove("d-none");
-    else empty.classList.add("d-none");
+  function setOverlayLoading(on, message = "Loading…") {
+    if (on) {
+      overlayCount += 1;
+      overlayText.textContent = message;
+      overlay.classList.remove("d-none");
+    } else {
+      overlayCount = Math.max(0, overlayCount - 1);
+      if (overlayCount === 0) overlay.classList.add("d-none");
+    }
   }
+
+  let filterTimer = null;
+
+  function applyFilters() {
+    // show a small loader, but only briefly
+    gridLoading.classList.remove("d-none");
+    clearTimeout(filterTimer);
+
+    // tiny delay makes it visible and avoids flicker
+    filterTimer = setTimeout(() => {
+      const filtered = filterProjects(allProjects, {
+        q: searchEl.value,
+        neighborhood: hoodEl.value,
+        status: statusEl.value,
+        chip,
+      });
+
+      renderProjects(grid, filtered);
+
+      if (filtered.length === 0) empty.classList.remove("d-none");
+      else empty.classList.add("d-none");
+
+      gridLoading.classList.add("d-none");
+    }, 120);
+  }
+
+  async function loadFromApi(message = "Loading projects…") {
+    setOverlayLoading(true, message);
+    try {
+      const data = await getProjects();
+      allProjects = data.projects || [];
+      fillNeighborhoodDropdown(hoodEl, allProjects);
+      applyFilters();
+    } finally {
+      setOverlayLoading(false);
+    }
+  }
+
+  //   async function refresh() {
+  //     const data = await getProjects();
+  //     allProjects = data.projects || [];
+
+  //     fillNeighborhoodDropdown(hoodEl, allProjects);
+
+  //     const filtered = filterProjects(allProjects, {
+  //       q: searchEl.value,
+  //       neighborhood: hoodEl.value,
+  //       status: statusEl.value,
+  //       chip,
+  //     });
+
+  //     renderProjects(grid, filtered);
+
+  //     if (filtered.length === 0) empty.classList.remove("d-none");
+  //     else empty.classList.add("d-none");
+  //   }
 
   document.querySelectorAll(".chip").forEach((btn) => {
     btn.addEventListener("click", async () => {
@@ -125,14 +179,20 @@ async function main() {
         .forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
       chip = btn.dataset.chip;
-      await refresh();
+      applyFilters();
+      // await refresh();
     });
   });
 
-  [searchEl, hoodEl, statusEl].forEach((el) => {
-    el.addEventListener("input", refresh);
-    el.addEventListener("change", refresh);
+  let searchDebounce = null;
+
+  searchEl.addEventListener("input", () => {
+    clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(() => applyFilters(), 180);
   });
+
+  hoodEl.addEventListener("change", applyFilters);
+  statusEl.addEventListener("change", applyFilters);
 
   createBtn.addEventListener("click", () => {
     modalTitle.textContent = "Create Project";
@@ -169,10 +229,15 @@ async function main() {
 
   confirmDanger.addEventListener("click", async () => {
     if (!pendingDeleteId) return;
-    await deleteProject(pendingDeleteId);
-    pendingDeleteId = null;
-    closeModal("confirm-modal");
-    await refresh();
+    setOverlayLoading(true, "Deleting project…");
+    try {
+      await deleteProject(pendingDeleteId);
+      pendingDeleteId = null;
+      closeModal("confirm-modal");
+      await loadFromApi("Refreshing projects…");
+    } finally {
+      setOverlayLoading(false);
+    }
   });
 
   form.addEventListener("submit", async (e) => {
@@ -182,14 +247,19 @@ async function main() {
     const payload = getFormPayload();
     if (!payload.title) return;
 
-    if (id) await updateProject(id, payload);
-    else await createProject(payload);
+    setOverlayLoading(true, id ? "Saving changes…" : "Creating project…");
+    try {
+      if (id) await updateProject(id, payload);
+      else await createProject(payload);
 
-    closeModal("project-modal");
-    await refresh();
+      closeModal("project-modal");
+      await loadFromApi("Refreshing projects…");
+    } finally {
+      setOverlayLoading(false);
+    }
   });
 
-  await refresh();
+  await loadFromApi("Loading projects…");
 }
 
 main().catch((e) => {
