@@ -13,6 +13,28 @@
     <link rel="stylesheet" href="./css/main.css" />
   </head>
   <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="./index.html"
+          >Boston Route Radar</a
+        >
+
+        <div class="ms-auto">
+          <a
+            class="btn btn-link text-decoration-none fw-bold"
+            href="./index.html"
+            >Issues</a
+          >
+          <a class="btn btn-link text-decoration-none" href="./projects.html"
+            >Projects</a
+          >
+          <a class="btn btn-link text-decoration-none" href="./admin.html"
+            >Admin</a
+          >
+        </div>
+      </div>
+    </nav>
+
     <div class="container">
       <header>
         <h1>Boston Route Radar</h1>
@@ -35,6 +57,7 @@
 
               <!-- Modal -->
               <!-- TO DO: Fix anything that is template -->
+
               <div
                 class="modal fade"
                 id="issue-modal"
@@ -68,6 +91,7 @@
                             id="issue-description"
                           />
                         </div>
+
                         <div class="mb-3">
                           <label for="category" class="form-label"
                             >Category</label
@@ -80,6 +104,7 @@
                             <option>Pedestrian</option>
                           </select>
                         </div>
+
                         <div class="mb-3">
                           <label for="neighborhood" class="form-label"
                             >Neighborhood</label
@@ -112,7 +137,21 @@
                             <option>Wharf District</option>
                           </select>
                         </div>
+
+                        <div class="mb-3">
+                          <label for="projectId" class="form-label"
+                            >Link to Project (optional)</label
+                          >
+                          <select id="projectId" class="form-select">
+                            <option value="">No project</option>
+                          </select>
+                          <div class="form-text">
+                            If selected, this issue will count as a linked issue
+                            for that project.
+                          </div>
+                        </div>
                       </div>
+
                       <div class="modal-footer">
                         <button
                           type="button"
@@ -133,6 +172,7 @@
                   </div>
                 </div>
               </div>
+
               <div class="modal fade" id="updateModal" tabindex="-1">
                 <div class="modal-dialog">
                   <form id="update-issue-form" class="modal-content">
@@ -144,6 +184,7 @@
                         data-bs-dismiss="modal"
                       ></button>
                     </div>
+
                     <div class="modal-body">
                       <input type="hidden" id="update-issue-id" />
 
@@ -168,6 +209,7 @@
                           <option>Pedestrian</option>
                         </select>
                       </div>
+
                       <div class="mb-3">
                         <label for="update-neighborhood" class="form-label"
                           >Neighborhood</label
@@ -200,7 +242,18 @@
                           <option>Wharf District</option>
                         </select>
                       </div>
+
+                      <!-- NEW: Project dropdown for update -->
+                      <div class="mb-3">
+                        <label for="update-projectId" class="form-label"
+                          >Link to Project (optional)</label
+                        >
+                        <select id="update-projectId" class="form-select">
+                          <option value="">No project</option>
+                        </select>
+                      </div>
                     </div>
+
                     <div class="modal-footer">
                       <button type="submit" class="btn btn-primary">
                         Save Changes
@@ -209,7 +262,9 @@
                   </form>
                 </div>
               </div>
+
               <div id="issues">/* This is where the issues will populate*/</div>
+
               <nav aria-label="Page navigation example">
                 <ul class="pagination" id="pagination"></ul>
               </nav>

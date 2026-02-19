@@ -18,6 +18,36 @@ function issues() {
     main.prepend(alert);
   };
 
+  me.loadProjectsDropdowns = async () => {
+    try {
+      const res = await fetch("/api/projects");
+      if (!res.ok) return;
+
+      const data = await res.json();
+      const projects = data.projects || [];
+
+      const createSelect = document.getElementById("projectId");
+      const updateSelect = document.getElementById("update-projectId");
+
+      const fill = (select) => {
+        if (!select) return;
+        // keep first option ("No project")
+        select.innerHTML = `<option value="">No project</option>`;
+        for (const p of projects) {
+          const opt = document.createElement("option");
+          opt.value = p._id; // important: send string id, backend converts to ObjectId
+          opt.textContent = p.title;
+          select.appendChild(opt);
+        }
+      };
+
+      fill(createSelect);
+      fill(updateSelect);
+    } catch (e) {
+      console.error("Failed to load projects for dropdown:", e);
+    }
+  };
+
   const renderPagination = ({ maxPage = 20 } = {}) => {
     const pagination = document.getElementById("pagination");
     pagination.innerHTML = "";
@@ -87,7 +117,7 @@ function issues() {
 
       deleteBtn.addEventListener("click", async () => {
         const confirmDelete = confirm(
-          "Are you sure you want to delete this issue?",
+          "Are you sure you want to delete this issue?"
         );
 
         if (confirmDelete) {
@@ -150,7 +180,7 @@ function issues() {
 
   me.refreshIssues = async () => {
     const res = await fetch(
-      `/api/issues?page=${page}&pageSize=${pageSize}&query=${query}`,
+      `/api/issues?page=${page}&pageSize=${pageSize}&query=${query}`
     );
 
     if (!res.ok) {
@@ -177,6 +207,9 @@ function issues() {
     issueForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
+      const selectedProjectId =
+        document.getElementById("projectId")?.value || "";
+
       const issue = {
         issueText: document.getElementById("issue-description").value,
         category: document.getElementById("category").value,
@@ -184,6 +217,7 @@ function issues() {
         reportedBy: "testUser",
         issueImage:
           "https://images.unsplash.com/photo-1561826791-4e15074d6782?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        projectId: selectedProjectId || null,
       };
 
       try {
@@ -271,6 +305,7 @@ function issues() {
 
 const myIssues = issues();
 
+myIssues.loadProjectsDropdowns();
 myIssues.refreshIssues();
 myIssues.addIssue();
 myIssues.setupUpdateListener();

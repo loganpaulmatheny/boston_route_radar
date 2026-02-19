@@ -1,0 +1,98 @@
+.filters .form-control,
+.filters .form-select,
+.filters .input-group-text {
+  height: 48px;
+  border-radius: 12px;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+@media (max-width: 992px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, minmax(240px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.project-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.project-img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  display: block;
+}
+
+.badge-float {
+  position: absolute;
+  right: 14px;
+  top: 130px;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.project-body {
+  padding: 14px;
+}
+
+.project-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.pill {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  border: 1px solid #e5e7eb;
+}
+
+.pill.planned {
+  background: #eef2ff;
+  color: #3730a3;
+}
+
+.pill.in_progress {
+  background: #fff7ed;
+  color: #9a3412;
+}
+
+.pill.completed {
+  background: #ecfdf3;
+  color: #166534;
+}
+
+.meta {
+  color: #4b5563;
+  margin-top: 8px;
+}
+
+.project-footer {
+  border-top: 1px solid #e5e7eb;
+  padding: 12px 14px;
+  display: flex;
+  gap: 10px;
+}
+
+.project-footer .btn {
+  flex: 1;
+}

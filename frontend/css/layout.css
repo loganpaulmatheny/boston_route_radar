@@ -1,0 +1,23 @@
+.topbar {
+    background: #fff;
+  }
+  
+  .brand {
+    font-size: 40px;
+    font-weight: 700;
+    text-decoration: none;
+    color: #111;
+    line-height: 1;
+  }
+  
+  .navlink {
+    text-decoration: none;
+    color: #111;
+    padding: 10px 12px;
+    border-radius: 10px;
+  }
+  
+  .navlink.active {
+    font-weight: 700;
+  }
+  
