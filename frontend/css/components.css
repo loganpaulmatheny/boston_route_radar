@@ -1,0 +1,31 @@
+.page-title {
+    font-size: 44px;
+    font-weight: 700;
+  }
+  
+  .card {
+    border-radius: var(--radius);
+  }
+  
+  .chip {
+    border: 1px solid #e5e7eb;
+    background: #f8fafc;
+    color: #111;
+    border-radius: 10px;
+    padding: 8px 14px;
+  }
+  
+  .chip.active {
+    background: #e7f0ff;
+    border-color: #cfe0ff;
+    color: #0b5ed7;
+  }
+  
+  .empty-state {
+    padding: 24px;
+    border: 1px dashed #d1d5db;
+    border-radius: var(--radius);
+    color: #6b7280;
+    text-align: center;
+  }
+  
