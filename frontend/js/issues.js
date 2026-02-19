@@ -18,6 +18,36 @@ function issues() {
     main.prepend(alert);
   };
 
+  me.loadProjectsDropdowns = async () => {
+    try {
+      const res = await fetch("/api/projects");
+      if (!res.ok) return;
+
+      const data = await res.json();
+      const projects = data.projects || [];
+
+      const createSelect = document.getElementById("projectId");
+      const updateSelect = document.getElementById("update-projectId");
+
+      const fill = (select) => {
+        if (!select) return;
+        // keep first option ("No project")
+        select.innerHTML = `<option value="">No project</option>`;
+        for (const p of projects) {
+          const opt = document.createElement("option");
+          opt.value = p._id; // important: send string id, backend converts to ObjectId
+          opt.textContent = p.title;
+          select.appendChild(opt);
+        }
+      };
+
+      fill(createSelect);
+      fill(updateSelect);
+    } catch (e) {
+      console.error("Failed to load projects for dropdown:", e);
+    }
+  };
+
   const renderPagination = ({ maxPage = 20 } = {}) => {
     const pagination = document.getElementById("pagination");
     pagination.innerHTML = "";
@@ -183,12 +213,16 @@ function issues() {
     issueForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
+      const selectedProjectId =
+        document.getElementById("projectId")?.value || "";
+
       const issue = {
         issueText: document.getElementById("issue-description").value,
         issueImage: document.getElementById("issue-image").value,
         category: document.getElementById("category").value,
         neighborhood: document.getElementById("neighborhood").value,
         reportedBy: "testUser",
+        projectId: selectedProjectId || null,
       };
 
       try {
@@ -276,6 +310,7 @@ function issues() {
 
 const myIssues = issues();
 
+myIssues.loadProjectsDropdowns();
 myIssues.refreshIssues();
 myIssues.addIssue();
 myIssues.setupUpdateListener();
