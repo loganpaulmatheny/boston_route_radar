@@ -10,6 +10,8 @@ app.use(express.json());
 
 // The .use method is used to serve static files in express
 app.use(express.static("frontend"));
+// This tells Express: "If someone asks for /assets, look inside the assets folder"
+app.use("/assets", express.static("assets"));
 
 // do a get request for the listings
 // note the 2 parameters the request and the response

@@ -14,164 +14,107 @@
   </head>
   <body>
     <div class="container">
-      <header>
-        <h1>Boston Route Radar</h1>
+      <header class="d-flex flex-column align-items-center">
+        <img
+          class="mt-4"
+          style="width: 240px; position: relative; left: 125px"
+          src="./assets/arrow.png"
+          alt="boston route radar logo"
+        />
+        <h1 class="">Boston Route Radar</h1>
+        <div class="alert alert-warning" role="alert">
+          Construction on the Green Line till 2026-02-20
+        </div>
       </header>
       <main>
         <section>
-          <div class="row">
-            <div class="col-12">
-              <h2>Ongoing Issues</h2>
-
-              <!-- Button trigger modal -->
-              <button
-                type="button"
-                class="btn btn-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#issue-modal"
-              >
-                Add Issue
-              </button>
-
-              <!-- Modal -->
-              <!-- TO DO: Fix anything that is template -->
-              <div
-                class="modal fade"
-                id="issue-modal"
-                tabindex="-1"
-                aria-labelledby="exampleModalLabel"
-                aria-hidden="true"
-              >
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="exampleModalLabel">
-                        Add Issue
-                      </h1>
-                      <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-
-                    <form id="new-issue-form">
-                      <div class="modal-body">
-                        <div class="mb-3">
-                          <label for="issue-description" class="col-form-label"
-                            >Issue Description</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="issue-description"
-                          />
-                        </div>
-                        <div class="mb-3">
-                          <label for="issue-image" class="col-form-label"
-                            >Issue Image (URL)</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="issue-image"
-                          />
-                        </div>
-                        <div class="mb-3">
-                          <label for="category" class="form-label"
-                            >Category</label
-                          >
-                          <select id="category" class="form-select">
-                            <option value="">Select a neighborhood</option>
-                            <option>Train</option>
-                            <option>Bus</option>
-                            <option>Bike</option>
-                            <option>Pedestrian</option>
-                          </select>
-                        </div>
-                        <div class="mb-3">
-                          <label for="neighborhood" class="form-label"
-                            >Neighborhood</label
-                          >
-                          <select id="neighborhood" class="form-select">
-                            <option value="">Select a neighborhood</option>
-                            <option>Allston</option>
-                            <option>Back Bay</option>
-                            <option>Bay Village</option>
-                            <option>Beacon Hill</option>
-                            <option>Brighton</option>
-                            <option>Charlestown</option>
-                            <option>Chinatown–Leather District</option>
-                            <option>Dorchester</option>
-                            <option>Downtown</option>
-                            <option>East Boston</option>
-                            <option>Fenway–Kenmore</option>
-                            <option>Hyde Park</option>
-                            <option>Jamaica Plain</option>
-                            <option>Mattapan</option>
-                            <option>Mid-Dorchester</option>
-                            <option>Mission Hill</option>
-                            <option>North End</option>
-                            <option>Roslindale</option>
-                            <option>Roxbury</option>
-                            <option>South Boston</option>
-                            <option>South End</option>
-                            <option>West End</option>
-                            <option>West Roxbury</option>
-                            <option>Wharf District</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="modal-footer">
-                        <button
-                          type="button"
-                          class="btn btn-secondary"
-                          data-bs-dismiss="modal"
-                        >
-                          Close
-                        </button>
-                        <button
-                          id="submit-issue"
-                          type="submit"
-                          class="btn btn-primary"
-                        >
-                          Submit
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
+          <div class="d-flex flex-column align-items-center mt-2">
+            <h2>Ongoing Issues</h2>
+            <div id="transpo-modes" class="d-flex justify-content-center gap-3">
+              <div class="text-center">
+                <span class="badge rounded-pill bg-info text-dark">Train</span>
+                <div id="train-count" class="fw-bold mt-1">0</div>
               </div>
-              <div class="modal fade" id="updateModal" tabindex="-1">
-                <div class="modal-dialog">
-                  <form id="update-issue-form" class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title">Update Issue</h5>
-                      <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                      ></button>
-                    </div>
-                    <div class="modal-body">
-                      <input type="hidden" id="update-issue-id" />
 
+              <div class="text-center">
+                <span class="badge rounded-pill bg-warning text-dark">Bus</span>
+                <div id="bus-count" class="fw-bold mt-1">0</div>
+              </div>
+
+              <div class="text-center">
+                <span class="badge rounded-pill bg-success">Bike</span>
+                <div id="bike-count" class="fw-bold mt-1">0</div>
+              </div>
+
+              <div class="text-center">
+                <span class="badge rounded-pill bg-light text-dark"
+                  >Pedestrian</span
+                >
+                <div id="ped-count" class="fw-bold mt-1">0</div>
+              </div>
+            </div>
+            <!-- Button trigger modal -->
+            <button
+              type="button"
+              class="btn btn-primary mt-3 mb-2"
+              data-bs-toggle="modal"
+              data-bs-target="#issue-modal"
+            >
+              Add Issue
+            </button>
+
+            <!-- Modal -->
+            <!-- TO DO: Fix anything that is template -->
+            <div
+              class="modal fade"
+              id="issue-modal"
+              tabindex="-1"
+              aria-labelledby="exampleModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                      Add Issue
+                    </h1>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+
+                  <form id="new-issue-form">
+                    <div class="modal-body">
                       <div class="mb-3">
-                        <label class="form-label">Description</label>
+                        <label for="issue-description" class="col-form-label"
+                          >Issue Description</label
+                        >
                         <input
+                          type="text"
                           class="form-control"
-                          id="update-description"
+                          id="issue-description"
                           required
                         />
                       </div>
-
                       <div class="mb-3">
-                        <label for="update-category" class="form-label"
+                        <label for="issue-image" class="col-form-label"
+                          >Issue Image (URL)</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="issue-image"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="category" class="form-label"
                           >Category</label
                         >
-                        <select id="update-category" class="form-select">
-                          <option value="">Select a neighborhood</option>
+                        <select id="category" class="form-select" required>
+                          <option value="">Select a category</option>
                           <option>Train</option>
                           <option>Bus</option>
                           <option>Bike</option>
@@ -179,10 +122,10 @@
                         </select>
                       </div>
                       <div class="mb-3">
-                        <label for="update-neighborhood" class="form-label"
+                        <label for="neighborhood" class="form-label"
                           >Neighborhood</label
                         >
-                        <select id="update-neighborhood" class="form-select">
+                        <select id="neighborhood" class="form-select" required>
                           <option value="">Select a neighborhood</option>
                           <option>Allston</option>
                           <option>Back Bay</option>
@@ -212,13 +155,105 @@
                       </div>
                     </div>
                     <div class="modal-footer">
-                      <button type="submit" class="btn btn-primary">
-                        Save Changes
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                      <button
+                        id="submit-issue"
+                        type="submit"
+                        class="btn btn-primary"
+                      >
+                        Submit
                       </button>
                     </div>
                   </form>
                 </div>
               </div>
+            </div>
+            <!-- Update Modal  -->
+            <div class="modal fade" id="updateModal" tabindex="-1">
+              <div class="modal-dialog">
+                <form id="update-issue-form" class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Update Issue</h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <input type="hidden" id="update-issue-id" />
+
+                    <div class="mb-3">
+                      <label class="form-label">Description</label>
+                      <input
+                        class="form-control"
+                        id="update-description"
+                        required
+                      />
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="update-category" class="form-label"
+                        >Category</label
+                      >
+                      <select id="update-category" class="form-select">
+                        <option value="">Select a neighborhood</option>
+                        <option>Train</option>
+                        <option>Bus</option>
+                        <option>Bike</option>
+                        <option>Pedestrian</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="update-neighborhood" class="form-label"
+                        >Neighborhood</label
+                      >
+                      <select id="update-neighborhood" class="form-select">
+                        <option value="">Select a neighborhood</option>
+                        <option>Allston</option>
+                        <option>Back Bay</option>
+                        <option>Bay Village</option>
+                        <option>Beacon Hill</option>
+                        <option>Brighton</option>
+                        <option>Charlestown</option>
+                        <option>Chinatown–Leather District</option>
+                        <option>Dorchester</option>
+                        <option>Downtown</option>
+                        <option>East Boston</option>
+                        <option>Fenway–Kenmore</option>
+                        <option>Hyde Park</option>
+                        <option>Jamaica Plain</option>
+                        <option>Mattapan</option>
+                        <option>Mid-Dorchester</option>
+                        <option>Mission Hill</option>
+                        <option>North End</option>
+                        <option>Roslindale</option>
+                        <option>Roxbury</option>
+                        <option>South Boston</option>
+                        <option>South End</option>
+                        <option>West End</option>
+                        <option>West Roxbury</option>
+                        <option>Wharf District</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">
+                      Save Changes
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
               <div id="issues" class="col-12">
                 <div id="issues-row" class="row">
                   /* This is where the issues will populate*/

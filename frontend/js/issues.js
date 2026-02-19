@@ -62,15 +62,16 @@ function issues() {
       const issueCard = document.createElement("div");
       issueCard.className = "col-md-3 mb-3";
       issueCard.dataset.id = _id;
+      const imageUrl = issueImage || "./assets/arrow.png";
 
       issueCard.innerHTML = `
     <div class="card h-100">  
       <div class="card-body">
         <img 
-          src="${issueImage}" 
+          src="${imageUrl}" 
           class="img-fluid rounded mb-2" 
           alt="${issueText}" 
-          style="height: 180px; width: 180px; object-fit: cover;">
+          style="height: 180px; width: 180px; object-fit: contain;">
         <span class="badge bg-secondary mb-2">${category}</span>
         <h3 class="h5">${neighborhood}</h3>
         <p class="card-text">${issueText}</p>
