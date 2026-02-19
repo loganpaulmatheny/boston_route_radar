@@ -7,6 +7,8 @@ function MyMongoDB({
 } = {}) {
   const me = {};
   // const URI = process.env.MONGODB_URI || defaultUri;
+  console.log("ENV CHECK:", process.env.MONGODB_URI);
+
   const URI = process.env.MONGODB_URI;
 
   const connect = () => {

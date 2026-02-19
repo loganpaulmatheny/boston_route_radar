@@ -27,7 +27,7 @@ router.get("/issues/", async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching issues:", error);
-    res.status(500).json({ error: "Internal Server Error", listings: [] });
+    res.status(500).json({ error: "Internal Server Error", issues: [] });
   }
 });
 
