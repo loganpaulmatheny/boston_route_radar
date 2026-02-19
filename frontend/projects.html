@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Boston Route Radar" />
     <meta name="description" content="Projects page" />
-
     <title>Projects | Boston Route Radar</title>
 
     <link
@@ -13,7 +12,6 @@
       rel="stylesheet"
     />
 
-    <!-- Modular CSS -->
     <link rel="stylesheet" href="./css/base.css" />
     <link rel="stylesheet" href="./css/layout.css" />
     <link rel="stylesheet" href="./css/components.css" />
@@ -22,8 +20,26 @@
   </head>
 
   <body>
-    <!-- Shared top nav -->
-    <div id="app-nav"></div>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="./index.html"
+          >Boston Route Radar</a
+        >
+        <div class="ms-auto">
+          <a class="btn btn-link text-decoration-none" href="./index.html"
+            >Issues</a
+          >
+          <a
+            class="btn btn-link text-decoration-none fw-bold"
+            href="./projects.html"
+            >Projects</a
+          >
+          <a class="btn btn-link text-decoration-none" href="./admin.html"
+            >Admin</a
+          >
+        </div>
+      </div>
+    </nav>
 
     <main class="container py-4">
       <div class="d-flex align-items-center justify-content-between mb-3">
@@ -38,9 +54,9 @@
         <div class="row g-2 align-items-center">
           <div class="col-12 col-lg-6">
             <div class="input-group">
-              <span class="input-group-text">
-                <span class="filter-icon">🔎</span>
-              </span>
+              <span class="input-group-text"
+                ><span class="filter-icon">🔎</span></span
+              >
               <input
                 id="search"
                 class="form-control"

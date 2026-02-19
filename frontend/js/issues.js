@@ -305,6 +305,7 @@ function issues() {
 
 const myIssues = issues();
 
+myIssues.loadProjectsDropdowns();
 myIssues.refreshIssues();
 myIssues.addIssue();
 myIssues.setupUpdateListener();
