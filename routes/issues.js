@@ -3,6 +3,10 @@ import MyDB from "../db/MyMongoDB.js";
 
 const router = express.Router();
 
+function escapeRegExp(str = "") {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 // Here we are using Router which serves as a mini express app
 // Think of this as a ROUTER FILE
 // We are keeping our main file clean and modular with a simple call
@@ -17,8 +21,19 @@ router.get("/issues/", async (req, res) => {
   const query = {};
   if (req.query.neighborhood) query.neighborhood = req.query.neighborhood;
   if (req.query.category) query.category = req.query.category;
-  if (req.query.query) query.$text = { $search: req.query.query };
+
   if (req.query.status) query.status = req.query.status;
+
+  const q = (req.query.query || "").trim();
+  if (q) {
+    const re = new RegExp(escapeRegExp(q), "i");
+    query.$or = [
+      { issueText: re },
+      { neighborhood: re },
+      { category: re },
+      { reportedBy: re },
+    ];
+  }
 
   if (req.query.projectId) {
     query.projectId = String(req.query.projectId);
