@@ -23,6 +23,7 @@ A civic web application that enables cities to crowdsource and track transportat
 - [Design, Mockups, and Demo](#Design-Mockups-and-Demo)
 - [Attributions and AI](#attributions)
 - [Authors and Course Information](#authors-and-course-information)
+- [Class Link](#class-link)
 
 ---
 
@@ -243,12 +244,12 @@ AI was used as a **development accelerator**, not a shortcut. All generated code
 - Predominantly focused on projects collection and functionality
 
 **Course Information**
-Class Link
+
 
 - **Course**: CS5610 Web Development
 - **Semester**: Spring 2026
 - **Instructor**: John Guerra Gomez
-- **Course Website**: [CS5610 Online Spring 2026](https://johnguerra.co/classes/webDevelopment_online_spring_2026/)
+- **Course Website - <h3 name="class-link">Class Link**: [CS5610 Online Spring 2026](https://johnguerra.co/classes/webDevelopment_online_spring_2026/)
 
 ---
 
