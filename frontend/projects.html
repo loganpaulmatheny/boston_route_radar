@@ -93,6 +93,36 @@
       <section class="projects-section">
         <div id="projects-grid" class="projects-grid"></div>
 
+        <div
+          class="d-flex flex-column flex-sm-row align-items-center justify-content-between gap-2 mt-4"
+        >
+          <div class="text-secondary small">
+            <span id="projects-count">0</span>
+          </div>
+
+          <div class="d-flex align-items-center gap-2">
+            <label for="pageSize" class="small text-secondary m-0"
+              >Per page</label
+            >
+            <select
+              id="pageSize"
+              class="form-select form-select-sm"
+              style="width: 110px"
+            >
+              <option value="6">6</option>
+              <option value="9" selected>9</option>
+              <option value="12">12</option>
+            </select>
+          </div>
+        </div>
+
+        <nav class="mt-2" aria-label="Projects pagination">
+          <ul
+            id="projects-pagination"
+            class="pagination justify-content-center mb-0"
+          ></ul>
+        </nav>
+
         <div id="grid-loading" class="grid-loading d-none" aria-live="polite">
           <div class="spinner-border" role="status" aria-hidden="true"></div>
           <span class="ms-2">Filtering…</span>
@@ -104,7 +134,118 @@
       </section>
     </main>
 
-    <!-- Edit/Create modal -->
+    <!-- View modal (new, matches Edit modal look) -->
+    <div id="view-modal" class="modal-overlay d-none" aria-hidden="true">
+      <div
+        class="modal-card modal-wide"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="view-modal-title"
+      >
+        <div class="modal-header">
+          <h2 id="view-modal-title" class="h3 m-0">View Project</h2>
+          <button class="btn btn-sm btn-light" data-modal-close="view-modal">
+            ✕
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="row g-4 align-items-start">
+            <!-- left: details -->
+            <div class="col-12 col-md-8">
+              <div class="mb-3">
+                <label class="form-label">Title</label>
+                <div id="view-title" class="view-field"></div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Neighborhoods</label>
+                <div id="view-hoods" class="view-field"></div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Status</label>
+                <div class="d-flex align-items-center gap-2">
+                  <span
+                    id="view-status"
+                    class="badge rounded-pill text-bg-secondary"
+                  ></span>
+                  <span class="text-secondary small"
+                    >Linked issues: <span id="view-linked">0</span></span
+                  >
+                </div>
+              </div>
+
+              <hr class="my-3" />
+
+              <div>
+                <div
+                  class="d-flex justify-content-between align-items-center mb-2"
+                >
+                  <h6 class="mb-0">Linked Issues</h6>
+                  <button
+                    id="btn-open-link-issues"
+                    type="button"
+                    class="btn btn-sm btn-outline-primary"
+                  >
+                    Link existing
+                  </button>
+                </div>
+
+                <div id="linked-issues-empty" class="text-muted small d-none">
+                  No issues linked to this project yet.
+                </div>
+
+                <ul
+                  id="linked-issues-list"
+                  class="list-group list-group-flush"
+                ></ul>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Estimated completion (text)</label>
+                <div id="view-est" class="view-field"></div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Image URL</label>
+                <div id="view-imageUrl" class="view-field"></div>
+              </div>
+
+              <div class="row g-3">
+                <div class="col-12 col-sm-6">
+                  <label class="form-label">Project ID</label>
+                  <div id="view-id" class="view-field small"></div>
+                </div>
+
+                <div class="col-12 col-sm-6">
+                  <label class="form-label">Created</label>
+                  <div id="view-created" class="view-field"></div>
+                </div>
+
+                <div class="col-12 col-sm-6">
+                  <label class="form-label">Last updated</label>
+                  <div id="view-updated" class="view-field"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- right: image -->
+            <div class="col-12 col-md-4">
+              <label class="form-label">Image</label>
+              <img
+                id="view-image"
+                class="view-img"
+                alt="Project image"
+                src=""
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit/Create modal (unchanged) -->
     <div id="project-modal" class="modal-overlay d-none" aria-hidden="true">
       <div
         class="modal-card"
@@ -199,6 +340,32 @@
             Cancel
           </button>
           <button id="confirm-danger" class="btn btn-danger">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="link-issues-modal" class="modal-overlay d-none" aria-hidden="true">
+      <div
+        class="modal-card modal-wide"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="link-issues-title"
+      >
+        <div class="modal-header">
+          <h2 id="link-issues-title" class="h3 m-0">Link an existing issue</h2>
+          <button
+            class="btn btn-sm btn-light"
+            data-modal-close="link-issues-modal"
+          >
+            ✕
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div id="unlinked-issues-empty" class="text-muted small d-none">
+            No unlinked issues available.
+          </div>
+          <ul id="unlinked-issues-list" class="list-group"></ul>
         </div>
       </div>
     </div>
