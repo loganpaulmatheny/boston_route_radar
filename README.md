@@ -26,7 +26,7 @@ A civic web application that enables cities to crowdsource and track transportat
 
 ---
 
-<a name="objective"> ## 🎯 Objective
+<h2 name="objective"> ## 🎯 Objective
 
 ### Course Objectives
 
