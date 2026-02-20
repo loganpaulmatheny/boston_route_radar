@@ -11,6 +11,7 @@ function MyMongoDB({
   let collection = null;
 
   // Change this to an async function to stop Mongo from creating a new client every function
+  // Long term this is a question of when / do you ever close the connection
   const connect = async () => {
     if (!collection) {
       await client.connect();
