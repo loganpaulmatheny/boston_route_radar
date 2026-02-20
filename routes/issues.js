@@ -20,6 +20,15 @@ router.get("/issues/", async (req, res) => {
   if (req.query.query) query.$text = { $search: req.query.query };
   if (req.query.status) query.status = req.query.status;
 
+  if (req.query.projectId) {
+    query.projectId = String(req.query.projectId);
+  } else if (req.query.unlinked === "true" || req.query.unlinked === "1") {
+    query.$or = [
+      { projectId: null },
+      { projectId: { $exists: false } },
+      { projectId: "" },
+    ];
+  }
   console.log("🏡 Received request for /api/issues", {
     page,
     pageSize,
@@ -49,6 +58,7 @@ router.post("/issues/", async (req, res) => {
       modifiedAt: new Date(),
       comments: [],
       likes: 0,
+      projectId: req.body?.projectId ? String(req.body.projectId) : null,
     };
     console.log(newIssue);
     const result = await MyDB.createIssue(newIssue);
@@ -80,6 +90,12 @@ router.delete("/issues/:id", async (req, res) => {
 router.put("/issues/:id", async (req, res) => {
   const issueId = req.params.id;
   const updatedData = req.body;
+
+  if (Object.prototype.hasOwnProperty.call(updatedData, "projectId")) {
+    updatedData.projectId = updatedData.projectId
+      ? String(updatedData.projectId)
+      : null;
+  }
 
   try {
     const result = await MyDB.updateIssueDB(issueId, updatedData);

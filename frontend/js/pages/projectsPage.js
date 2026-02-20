@@ -98,6 +98,33 @@ function setFormFromProject(p) {
   document.getElementById("imageUrl").value = p?.imageUrl || "";
 }
 
+async function fetchIssuesByProjectId(projectId) {
+  const res = await fetch(
+    `/api/issues?projectId=${encodeURIComponent(projectId)}`
+  );
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data?.error || "Failed to load linked issues");
+  return data;
+}
+
+async function fetchUnlinkedIssues() {
+  const res = await fetch(`/api/issues?unlinked=true`);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data?.error || "Failed to load unlinked issues");
+  return data;
+}
+
+async function updateIssueProject(issueId, projectIdOrNull) {
+  const res = await fetch(`/api/issues/${issueId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ projectId: projectIdOrNull }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data?.error || "Failed to update issue");
+  return data;
+}
+
 async function main() {
   wireModalClose();
 
@@ -119,12 +146,75 @@ async function main() {
   const confirmDanger = document.getElementById("confirm-danger");
   const confirmText = document.getElementById("confirm-text");
 
+  const linkedListEl = document.getElementById("linked-issues-list");
+  const linkedEmptyEl = document.getElementById("linked-issues-empty");
+  const openLinkBtn = document.getElementById("btn-open-link-issues");
+
+  const linkIssuesModalEl = document.getElementById("link-issues-modal");
+  const unlinkedListEl = document.getElementById("unlinked-issues-list");
+  const unlinkedEmptyEl = document.getElementById("unlinked-issues-empty");
+
+  let activeViewProjectId = null;
+
   let allProjects = [];
   let chip = "all";
   let pendingDeleteId = null;
 
   let page = 1;
   let pageSize = parseInt(pageSizeEl?.value, 10) || 9;
+
+  async function loadAndRenderLinkedIssues(projectId) {
+    if (!linkedListEl) return;
+
+    linkedListEl.innerHTML = "";
+    linkedEmptyEl?.classList.add("d-none");
+
+    const data = await fetchIssuesByProjectId(projectId);
+    const issues = data.issues || [];
+
+    if (issues.length === 0) {
+      linkedEmptyEl?.classList.remove("d-none");
+      return;
+    }
+
+    for (const issue of issues) {
+      const li = document.createElement("li");
+      li.className =
+        "list-group-item d-flex justify-content-between align-items-start";
+
+      const left = document.createElement("div");
+      left.className = "me-3";
+      left.innerHTML = `
+        <div class="fw-semibold">${issue.issueText || "Untitled issue"}</div>
+        <div class="small text-muted">
+          ${issue.neighborhood || ""}
+          ${issue.category ? "• " + issue.category : ""}
+        </div>
+      `;
+
+      const btn = document.createElement("button");
+      btn.className = "btn btn-sm btn-outline-danger";
+      btn.type = "button";
+      btn.textContent = "Unlink";
+
+      btn.addEventListener("click", async () => {
+        btn.disabled = true;
+        try {
+          await updateIssueProject(issue._id, null); // unlink
+          await loadAndRenderLinkedIssues(projectId);
+          await loadFromApi("Refreshing projects…"); // update counts
+        } catch (e) {
+          alert(e.message || "Failed to unlink issue");
+        } finally {
+          btn.disabled = false;
+        }
+      });
+
+      li.appendChild(left);
+      li.appendChild(btn);
+      linkedListEl.appendChild(li);
+    }
+  }
 
   function setPage(next) {
     page = Math.max(1, next);
@@ -322,6 +412,64 @@ async function main() {
     }, 180);
   });
 
+  openLinkBtn?.addEventListener("click", async () => {
+    if (!activeViewProjectId) return;
+
+    unlinkedListEl.innerHTML = "";
+    unlinkedEmptyEl?.classList.add("d-none");
+
+    try {
+      const data = await fetchUnlinkedIssues();
+      const issues = data.issues || [];
+
+      if (issues.length === 0) {
+        unlinkedEmptyEl?.classList.remove("d-none");
+      } else {
+        for (const issue of issues) {
+          const li = document.createElement("li");
+          li.className =
+            "list-group-item d-flex justify-content-between align-items-center";
+
+          const label = document.createElement("div");
+          label.innerHTML = `
+            <div class="fw-semibold">${issue.issueText || "Untitled issue"}</div>
+            <div class="small text-muted">
+              ${issue.neighborhood || ""}
+              ${issue.category ? "• " + issue.category : ""}
+            </div>
+          `;
+
+          const btn = document.createElement("button");
+          btn.className = "btn btn-sm btn-primary";
+          btn.type = "button";
+          btn.textContent = "Link";
+
+          btn.addEventListener("click", async () => {
+            btn.disabled = true;
+            try {
+              await updateIssueProject(issue._id, activeViewProjectId);
+              closeModal("link-issues-modal");
+              await loadAndRenderLinkedIssues(activeViewProjectId);
+              await loadFromApi("Refreshing projects…");
+            } catch (e) {
+              alert(e.message || "Failed to link issue");
+            } finally {
+              btn.disabled = false;
+            }
+          });
+
+          li.appendChild(label);
+          li.appendChild(btn);
+          unlinkedListEl.appendChild(li);
+        }
+      }
+
+      openModal("link-issues-modal");
+    } catch (e) {
+      alert(e.message || "Failed to load unlinked issues");
+    }
+  });
+
   hoodEl.addEventListener("change", () => {
     page = 1;
     applyFilters();
@@ -343,7 +491,7 @@ async function main() {
     openModal("project-modal");
   });
 
-  grid.addEventListener("click", (e) => {
+  grid.addEventListener("click", async (e) => {
     const btn = e.target.closest("button[data-action]");
     if (!btn) return;
 
@@ -396,6 +544,8 @@ async function main() {
       document.getElementById("view-linked").textContent =
         typeof project.linkedIssues === "number" ? project.linkedIssues : 0;
 
+      activeViewProjectId = String(project._id);
+      await loadAndRenderLinkedIssues(activeViewProjectId);
       openModal("view-modal");
       return;
     }
