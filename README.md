@@ -61,10 +61,6 @@ A page that will surface official city projects — infrastructure initiatives, 
 
 This feature brings transparency to city government by connecting residents with the work being done on their behalf.
 
-### City Alerts
-
-City administrators can post alerts that notify residents of known, ongoing disruptions — road closures, construction zones, service outages, and more.
-
 ### Filtering & Status Views
 
 Issues can be browsed with filters to show all community issues or just your own submissions. Status indicators help distinguish between active, in-progress, and resolved reports.
@@ -162,13 +158,18 @@ boston_route_radar/
 
 ## 🔌 API Overview
 
-| Method   | Endpoint          | Description                         |
-| -------- | ----------------- | ----------------------------------- |
-| `GET`    | `/api/issues`     | Fetch all infrastructure issues     |
-| `POST`   | `/api/issues`     | Submit a new issue                  |
-| `PUT`    | `/api/issues/:id` | Update an issue                     |
-| `DELETE` | `/api/issues/:id` | Delete an issue                     |
-| `GET`    | `/api/projects`   | _(Coming Soon)_ Fetch city projects |
+| Method   | Endpoint                     | Description                                                           |
+| -------- | ---------------------------- | --------------------------------------------------------------------- |
+| `GET`    | `/api/issues`                | Fetch all infrastructure issues                                       |
+| `GET`    | `/api/issues?projectId=<id>` | Fetch issues linked to a project (projectId stored as string)         |
+| `GET`    | `/api/issues?unlinked=true`  | Fetch only unlinked issues (no projectId)                             |
+| `POST`   | `/api/issues`                | Submit a new issue                                                    |
+| `PUT`    | `/api/issues/:id`            | Update an issue (including linking or unlinking by setting projectId) |
+| `DELETE` | `/api/issues/:id`            | Delete an issue                                                       |
+| `GET`    | `/api/projects`              | Fetch all city projects (includes linkedIssues count)                 |
+| `POST`   | `/api/projects`              | Create a new project                                                  |
+| `PUT`    | `/api/projects/:id`          | Update a project                                                      |
+| `DELETE` | `/api/projects/:id`          | Delete a project                                                      |
 
 ---
 
