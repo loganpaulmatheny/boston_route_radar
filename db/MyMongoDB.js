@@ -69,6 +69,20 @@ function MyMongoDB({
     }
   };
 
+  me.getCategoryCounts = async () => {
+    const issues = await connect();
+    try {
+      // do an aggregation function within the database
+      const data = await issues
+        .aggregate([{ $group: { _id: "$category", count: { $sum: 1 } } }])
+        .toArray();
+      return data;
+    } catch (err) {
+      console.error("Error fetching category counts", err);
+      throw err;
+    }
+  };
+
   return me;
 }
 

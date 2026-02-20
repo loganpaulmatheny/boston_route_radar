@@ -340,6 +340,24 @@ function issues() {
     });
   };
 
+  me.loadCategoryCounts = async () => {
+    const res = await fetch("/api/issues?page=1&pageSize=1000");
+    const data = await res.json();
+
+    // take the data and reduce them to just the categories and their counts
+    const counts = (data.issues || []).reduce((acc, issue) => {
+      const cat = (issue.category || "unknown").toLowerCase();
+      acc[cat] = (acc[cat] || 0) + 1;
+      return acc;
+    }, {});
+
+    console.log(counts);
+    document.getElementById("train-count").textContent = counts.train || 0;
+    document.getElementById("bus-count").textContent = counts.bus || 0;
+    document.getElementById("bike-count").textContent = counts.bike || 0;
+    document.getElementById("ped-count").textContent = counts.pedestrian || 0;
+  };
+
   return me;
 }
 
@@ -350,3 +368,4 @@ myIssues.refreshIssues();
 myIssues.addIssue();
 myIssues.setupUpdateListener();
 myIssues.setupFilterListeners();
+myIssues.loadCategoryCounts();

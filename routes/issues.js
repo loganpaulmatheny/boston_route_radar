@@ -91,4 +91,14 @@ router.put("/issues/:id", async (req, res) => {
   }
 });
 
+// GET: Get issue counts by mode
+router.get("issues/counts", async (req, res) => {
+  try {
+    const counts = await MyDB.getCategoryCounts();
+    res.json({ counts });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 export default router;
