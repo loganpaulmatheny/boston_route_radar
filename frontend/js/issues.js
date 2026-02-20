@@ -89,35 +89,41 @@ function issues() {
         reportedBy,
         modifiedAt,
       } = issue;
-      const card = document.createElement("div");
-      card.className = "card mb-3";
-      card.dataset.id = _id;
+      const issueCard = document.createElement("div");
+      issueCard.className = "col-md-3 mb-3";
+      issueCard.dataset.id = _id;
+      const imageUrl = issueImage || "./assets/arrow.png";
 
-      card.innerHTML = `
-    <div class="card-body">
-      <img 
-        src="${issueImage}" 
-        class="img-fluid rounded mb-2" 
-        alt="${issueText}" 
-        style="height: 180px; width: 180px; object-fit: cover;">
-      <span class="badge bg-secondary mb-2">${category}</span>
-      <h3 class="h5">${neighborhood}</h3>
-      <p class="card-text">${issueText}</p>
-      <p class="reported-by">${reportedBy}</p>
-      <div class="d-flex justify-content-between align-items-center">
-        <small class="text-muted">Status: <strong>${status}</strong></small>
-        <small class="text-muted">Last Updated: ${modifiedAt}</small> 
-        <button class="btn btn-info">Info</button>
-        <button class="btn btn-sm btn-danger btn-delete">Delete</button>
+      issueCard.innerHTML = `
+    <div class="card h-100">  
+      <div class="card-body">
+        <img 
+          src="${imageUrl}" 
+          class="img-fluid rounded mb-2" 
+          alt="${issueText}" 
+          style="height: 180px; width: 180px; object-fit: contain;">
+        <span class="badge bg-secondary mb-2">${category}</span>
+        <h3 class="h5">${neighborhood}</h3>
+        <p class="card-text">${issueText}</p>
+        <p class="reported-by">${reportedBy}</p>
+        <div class="status-section">
+          <p class="text-muted">Status: <strong>${status}</strong></p>
+          <small class="text-muted">Last Updated: ${modifiedAt}</small> 
+          <br>
+          <div class="d-flex justify-content-center align-items-center">
+            <button class="btn btn-info m-3">Info</button>
+            <button class="btn btn-sm btn-danger btn-delete m-3">Delete</button>
+          </div>
+        </div>
       </div>
     </div>
   `;
 
-      const deleteBtn = card.querySelector(".btn-delete");
+      const deleteBtn = issueCard.querySelector(".btn-delete");
 
       deleteBtn.addEventListener("click", async () => {
         const confirmDelete = confirm(
-          "Are you sure you want to delete this issue?"
+          "Are you sure you want to delete this issue?",
         );
 
         if (confirmDelete) {
@@ -126,7 +132,7 @@ function issues() {
         }
       });
 
-      const updateBtn = card.querySelector(".btn-info");
+      const updateBtn = issueCard.querySelector(".btn-info");
 
       updateBtn.addEventListener("click", async () => {
         const idInput = document.getElementById("update-issue-id");
@@ -153,7 +159,7 @@ function issues() {
         modal.show();
       });
 
-      issuesDiv.appendChild(card);
+      issuesDiv.appendChild(issueCard);
     }
   };
 
@@ -180,7 +186,7 @@ function issues() {
 
   me.refreshIssues = async () => {
     const res = await fetch(
-      `/api/issues?page=${page}&pageSize=${pageSize}&query=${query}`
+      `/api/issues?page=${page}&pageSize=${pageSize}&query=${query}`,
     );
 
     if (!res.ok) {
@@ -193,7 +199,7 @@ function issues() {
 
     // console.log("Fetched issues", data);
 
-    const issuesDiv = document.getElementById("issues");
+    const issuesDiv = document.getElementById("issues-row");
 
     issuesDiv.innerHTML = "";
 
@@ -212,11 +218,10 @@ function issues() {
 
       const issue = {
         issueText: document.getElementById("issue-description").value,
+        issueImage: document.getElementById("issue-image").value,
         category: document.getElementById("category").value,
         neighborhood: document.getElementById("neighborhood").value,
         reportedBy: "testUser",
-        issueImage:
-          "https://images.unsplash.com/photo-1561826791-4e15074d6782?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         projectId: selectedProjectId || null,
       };
 

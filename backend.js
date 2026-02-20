@@ -11,6 +11,8 @@ app.use(express.json());
 
 // serve frontend static files
 app.use(express.static("frontend"));
+// This tells Express: "If someone asks for /assets, look inside the assets folder"
+app.use("/assets", express.static("assets"));
 
 // APIs
 app.use("/api/", issuesRouter);
