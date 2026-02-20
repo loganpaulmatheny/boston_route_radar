@@ -120,7 +120,7 @@ function issues() {
 
       deleteBtn.addEventListener("click", async () => {
         const confirmDelete = confirm(
-          "Are you sure you want to delete this issue?",
+          "Are you sure you want to delete this issue?"
         );
 
         if (confirmDelete) {
@@ -200,7 +200,7 @@ function issues() {
     const statusFilter = activeChip !== "all" ? activeChip : "";
 
     const res = await fetch(
-      `/api/issues?page=${page}&pageSize=${pageSize}&query=${searchFilter}&neighborhood=${neighborhoodFilter}&category=${categoryFilter}&status=${statusFilter}`,
+      `/api/issues?page=${page}&pageSize=${pageSize}&query=${searchFilter}&neighborhood=${neighborhoodFilter}&category=${categoryFilter}&status=${statusFilter}`
     );
 
     if (!res.ok) {
@@ -316,8 +316,8 @@ function issues() {
         issueText: document.getElementById("update-description").value,
         category: document.getElementById("update-category").value,
         neighborhood: document.getElementById("update-neighborhood").value,
+        projectId: document.getElementById("update-projectId")?.value || null,
       };
-
       // pass the ID and the OBJECT to method for updating the DB (event > route > DB > back to client)
       await me.updateIssue(id, updatedData);
     });
