@@ -67,9 +67,9 @@ Issues can be browsed with filters to show all community issues or just your own
 
 ---
 
-##Screenshots
+## Screenshots
 
-###Issues
+### Issues
 ![issues landing page](./assets/issues.png)
 ![Add Issue Modal](./assets/add_issue.png)
 ![Projects View](./assets/projects.png)
