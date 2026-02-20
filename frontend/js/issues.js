@@ -163,30 +163,19 @@ function issues() {
     }
   };
 
-  me.setupUpdateListener = () => {
-    const updateForm = document.getElementById("update-issue-form");
-
-    updateForm.addEventListener("submit", async (e) => {
-      e.preventDefault(); // stop the refresh
-      // console.log("getting here");
-
-      // grab the NEW values from the modal inputs
-      const id = document.getElementById("update-issue-id").value;
-
-      const updatedData = {
-        issueText: document.getElementById("update-description").value,
-        category: document.getElementById("update-category").value,
-        neighborhood: document.getElementById("update-neighborhood").value,
-      };
-
-      // pass the ID and the OBJECT to your method
-      await me.updateIssue(id, updatedData);
-    });
-  };
-
   me.refreshIssues = async () => {
+    // Check the filterbar for any specifics
+    const searchFilter = document.getElementById("issue-search")?.value || "";
+    const neighborhoodFilter =
+      document.getElementById("issue-neighborhood")?.value || "";
+    const categoryFilter =
+      document.getElementById("issue-category")?.value || "";
+    const activeChip =
+      document.querySelector(".issue-chip.active")?.dataset.chip || "all";
+    const statusFilter = activeChip !== "all" ? activeChip : "";
+
     const res = await fetch(
-      `/api/issues?page=${page}&pageSize=${pageSize}&query=${query}`,
+      `/api/issues?page=${page}&pageSize=${pageSize}&query=${searchFilter}&neighborhood=${neighborhoodFilter}&category=${categoryFilter}&status=${statusFilter}`,
     );
 
     if (!res.ok) {
@@ -305,6 +294,70 @@ function issues() {
     }
   };
 
+  me.setupUpdateListener = () => {
+    const updateForm = document.getElementById("update-issue-form");
+
+    updateForm.addEventListener("submit", async (e) => {
+      e.preventDefault(); // stop the refresh
+      // console.log("getting here");
+
+      // grab the NEW values from the modal inputs
+      const id = document.getElementById("update-issue-id").value;
+
+      const updatedData = {
+        issueText: document.getElementById("update-description").value,
+        category: document.getElementById("update-category").value,
+        neighborhood: document.getElementById("update-neighborhood").value,
+      };
+
+      // pass the ID and the OBJECT to your method
+      await me.updateIssue(id, updatedData);
+    });
+  };
+
+  me.setupFilterListeners = () => {
+    document
+      .getElementById("issue-search")
+      ?.addEventListener("input", () => me.refreshIssues());
+    document
+      .getElementById("issue-neighborhood")
+      ?.addEventListener("change", () => me.refreshIssues());
+    document
+      .getElementById("issue-category")
+      ?.addEventListener("change", () => {
+        me.refreshIssues();
+        // console.log("Changed category");
+      });
+
+    document.querySelectorAll(".issue-chip").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document
+          .querySelectorAll(".issue-chip")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        me.refreshIssues();
+      });
+    });
+  };
+
+  me.loadCategoryCounts = async () => {
+    const res = await fetch("/api/issues?page=1&pageSize=1000");
+    const data = await res.json();
+
+    // take the data and reduce them to just the categories and their counts
+    const counts = (data.issues || []).reduce((acc, issue) => {
+      const cat = (issue.category || "unknown").toLowerCase();
+      acc[cat] = (acc[cat] || 0) + 1;
+      return acc;
+    }, {});
+
+    console.log(counts);
+    document.getElementById("train-count").textContent = counts.train || 0;
+    document.getElementById("bus-count").textContent = counts.bus || 0;
+    document.getElementById("bike-count").textContent = counts.bike || 0;
+    document.getElementById("ped-count").textContent = counts.pedestrian || 0;
+  };
+
   return me;
 }
 
@@ -314,3 +367,5 @@ myIssues.loadProjectsDropdowns();
 myIssues.refreshIssues();
 myIssues.addIssue();
 myIssues.setupUpdateListener();
+myIssues.setupFilterListeners();
+myIssues.loadCategoryCounts();
