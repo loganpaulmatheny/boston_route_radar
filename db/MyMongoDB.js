@@ -3,25 +3,24 @@ import { MongoClient, ObjectId } from "mongodb";
 function MyMongoDB({
   dbName = "boston-route-radar",
   collectionName = "issues",
-  defaultUri = "mongodb://localhost:27017",
 } = {}) {
   const me = {};
-  // const URI = process.env.MONGODB_URI || defaultUri;
-  console.log("ENV CHECK:", process.env.MONGODB_URI);
-
   const URI = process.env.MONGODB_URI;
 
-  const connect = () => {
-    console.log("Connecting to MongoDB at", URI);
-    const client = new MongoClient(URI);
-    const issues = client.db(dbName).collection(collectionName);
+  const client = new MongoClient(URI);
+  let collection = null;
 
-    return { client, issues };
+  // Change this to an async function to stop Mongo from creating a new client every function
+  const connect = async () => {
+    if (!collection) {
+      await client.connect();
+      collection = client.db(dbName).collection(collectionName);
+    }
+    return collection;
   };
 
   me.getIssues = async ({ query = {}, pageSize = 20, page = 1 } = {}) => {
-    const { client, issues } = connect();
-
+    const issues = await connect();
     try {
       const data = await issues
         .find(query)
@@ -34,58 +33,42 @@ function MyMongoDB({
     } catch (err) {
       console.error("Error fetching issues from MongoDB", err);
       throw err;
-    } finally {
-      await client.close();
     }
   };
 
   me.createIssue = async (issue) => {
-    const { client, issues } = connect();
+    const issues = await connect();
     try {
-      const result = await issues.insertOne(issue);
-      return result;
+      return await issues.insertOne(issue);
     } catch (err) {
       console.error("Error inserting issue into MongoDB", err);
       throw err;
-    } finally {
-      await client.close();
     }
   };
 
   me.removeIssue = async (issueId) => {
-    const { client, issues } = connect();
+    const issues = await connect();
     try {
-      const filter = { _id: new ObjectId(issueId) };
-      const result = await issues.deleteOne(filter);
-      return result;
+      return await issues.deleteOne({ _id: new ObjectId(issueId) });
     } catch (err) {
       console.error("Error deleting issue from the DB", err);
       throw err;
-    } finally {
-      await client.close();
     }
   };
 
   me.updateIssueDB = async (issueId, updatedData) => {
-    const { client, issues } = connect();
+    const issues = await connect();
     try {
-      const filter = { _id: new ObjectId(issueId) };
-      const updateDoc = {
-        $set: {
-          ...updatedData,
-          modifiedAt: new Date(),
-        },
-      };
-
-      const result = await issues.updateOne(filter, updateDoc);
-      return result;
+      return await issues.updateOne(
+        { _id: new ObjectId(issueId) },
+        { $set: { ...updatedData, modifiedAt: new Date() } },
+      );
     } catch (err) {
       console.error("MongoDB Update Error:", err);
       throw err;
-    } finally {
-      await client.close();
     }
   };
+
   return me;
 }
 
