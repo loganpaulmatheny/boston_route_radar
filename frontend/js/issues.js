@@ -120,7 +120,7 @@ function issues() {
 
       deleteBtn.addEventListener("click", async () => {
         const confirmDelete = confirm(
-          "Are you sure you want to delete this issue?"
+          "Are you sure you want to delete this issue?",
         );
 
         if (confirmDelete) {
@@ -200,7 +200,7 @@ function issues() {
     const statusFilter = activeChip !== "all" ? activeChip : "";
 
     const res = await fetch(
-      `/api/issues?page=${page}&pageSize=${pageSize}&query=${query}`
+      `/api/issues?page=${page}&pageSize=${pageSize}&query=${searchFilter}&neighborhood=${neighborhoodFilter}&category=${categoryFilter}&status=${statusFilter}`,
     );
 
     if (!res.ok) {
