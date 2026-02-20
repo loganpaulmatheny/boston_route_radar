@@ -76,7 +76,7 @@ Issues can be browsed with filters to show all community issues or just your own
 ![Projects View Modal](./assets/project_view_sc.png)
 ![Projects delete Modal](./assets/project_delete_sc.png)
 
-## 🔧 Tech Stack
+<h2 name ="tech-stack"> 🔧 Tech Stack
 
 ### Backend
 
@@ -99,7 +99,7 @@ Issues can be browsed with filters to show all community issues or just your own
 
 ---
 
-## 📁 Project Structure
+<h2 name="project-structure"> 📁 Project Structure
 
 ```
 boston_route_radar/
@@ -115,7 +115,7 @@ boston_route_radar/
 
 ---
 
-## 💻 Installation
+<h2 name ="installation"> 💻 Installation
 
 Instructions on how to run the application
 
@@ -167,7 +167,7 @@ Instructions on how to run the application
 
 ---
 
-## 🔌 API Overview
+<h2 name="api-overview"> 🔌 API Overview
 
 | Method   | Endpoint                     | Description                                                           |
 | -------- | ---------------------------- | --------------------------------------------------------------------- |
@@ -184,7 +184,7 @@ Instructions on how to run the application
 
 ---
 
-## 🎨 Design, Mockups, and Demo
+<h2 name="Design-Mockups-and-Demo"> 🎨 Design, Mockups, and Demo
 
 #### [Design Document](https://docs.google.com/document/d/1mQpv4x2_FTDfwvrKBbPpvTOqKNteUNoMVR5khnlfjzI/edit?usp=sharing)
 
@@ -194,7 +194,7 @@ Instructions on how to run the application
 
 ---
 
-## Attributions
+<h2 name="attributions"> Attributions
 
 ### Creator Attributions
 
@@ -226,7 +226,7 @@ AI was used as a **development accelerator**, not a shortcut. All generated code
 
 ---
 
-## 👨‍💻 Authors and Course Information
+ <h2 name="authors-and-course-information"> 👨‍💻 Authors and Course Information
 
 **Logan Matheny**
 
