@@ -12,7 +12,14 @@ const router = express.Router();
 router.get("/issues/", async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const pageSize = parseInt(req.query.pageSize) || 20;
+
+  // Add query if the filter has been editted
   const query = {};
+  if (req.query.neighborhood) query.neighborhood = req.query.neighborhood;
+  if (req.query.category) query.category = req.query.category;
+  if (req.query.query) query.$text = { $search: req.query.query };
+  if (req.query.status) query.status = req.query.status;
+
   console.log("🏡 Received request for /api/issues", {
     page,
     pageSize,
@@ -37,7 +44,7 @@ router.post("/issues/", async (req, res) => {
   try {
     const newIssue = {
       ...req.body,
-      status: "Open", // Default status
+      status: "open", // Default status
       createdAt: new Date(), // Important for sorting
       modifiedAt: new Date(),
       comments: [],
@@ -81,6 +88,16 @@ router.put("/issues/:id", async (req, res) => {
     console.log(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// GET: Get issue counts by mode
+router.get("issues/counts", async (req, res) => {
+  try {
+    const counts = await MyDB.getCategoryCounts();
+    res.json({ counts });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
