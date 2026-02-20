@@ -27,7 +27,6 @@ router.get("/issues/", async (req, res) => {
   });
 
   try {
-    console.log("Hello world");
     const issues = await MyDB.getIssues({ query, pageSize, page });
     res.json({
       issues,
@@ -42,10 +41,11 @@ router.get("/issues/", async (req, res) => {
 router.post("/issues/", async (req, res) => {
   console.log(req.body);
   try {
+    // spread the data to add additional information to the request
     const newIssue = {
       ...req.body,
-      status: "open", // Default status
-      createdAt: new Date(), // Important for sorting
+      status: "open", // default status
+      createdAt: new Date(), // NEED FOR SORTING and seeing new ones at the top
       modifiedAt: new Date(),
       comments: [],
       likes: 0,
@@ -77,7 +77,6 @@ router.delete("/issues/:id", async (req, res) => {
 });
 
 // PUT: Update the issue
-// TODO: Start back here and fix this
 router.put("/issues/:id", async (req, res) => {
   const issueId = req.params.id;
   const updatedData = req.body;
@@ -97,7 +96,7 @@ router.get("issues/counts", async (req, res) => {
     const counts = await MyDB.getCategoryCounts();
     res.json({ counts });
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error.message });
   }
 });
 

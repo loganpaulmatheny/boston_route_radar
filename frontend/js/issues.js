@@ -6,8 +6,6 @@ function issues() {
   const pageSize = parseInt(params.get("pageSize")) || 20;
   const query = params.get("query") || "";
 
-  // console.log("issue params:", { page, pageSize, query });
-
   me.showError = ({ msg, res, type = "danger" } = {}) => {
     // Show an error using bootstrap alerts in the main tag
     const main = document.querySelector("main");
@@ -77,7 +75,6 @@ function issues() {
   };
 
   const renderIssues = (issuesDiv, issues) => {
-    // console.log(issues);
     for (const issue of issues) {
       const {
         _id,
@@ -152,9 +149,9 @@ function issues() {
         descInput.value = issueText;
         catInput.value = category;
         neighInput.value = neighborhood;
-        // TODO: What info is not on the card that should be
 
         // Use 'new' keyword and pass the element
+        // Can't quite reuse the same modal
         const modal = new window.bootstrap.Modal(upModal);
         modal.show();
       });
@@ -186,8 +183,6 @@ function issues() {
 
     const data = await res.json();
 
-    // console.log("Fetched issues", data);
-
     const issuesDiv = document.getElementById("issues-row");
 
     issuesDiv.innerHTML = "";
@@ -215,27 +210,19 @@ function issues() {
       };
 
       try {
-        // console.log(issue);
         const res = await fetch("/api/issues", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(issue),
         });
-        // console.log("getting here");
 
         if (res.ok) {
-          // hide the modal
           const issueModal = document.getElementById("issue-modal");
-          // console.log(issueModal);
-          // TODO: should we do this? what is the risk
           const modal = window.bootstrap.Modal.getInstance(issueModal);
-          // console.log(modal);
           if (modal) modal.hide();
 
-          // Clear the form
           issueForm.reset();
 
-          // refresh the list
           me.refreshIssues();
         } else {
           alert("Failed to save issue");
@@ -253,7 +240,7 @@ function issues() {
       });
 
       if (res.ok) {
-        // TODO: I could change the color of the button
+        //TODO: I could change the color of the button after deleted or give a message
 
         me.refreshIssues();
       } else {
@@ -266,25 +253,18 @@ function issues() {
 
   me.updateIssue = async (id, updatedData) => {
     try {
-      // console.log(issue);
       const res = await fetch(`/api/issues/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedData),
       });
 
+      //TODO: I think I'm currently creating a modal per issue, and it would be better instead
+      // to reuse one
       if (res.ok) {
-        // hide the modal
         const updateModal = document.getElementById("updateModal");
-        // console.log(issueModal);
-        // TODO: should we do this? what is the risk
         const modal = window.bootstrap.Modal.getInstance(updateModal);
-        // console.log(modal);
         if (modal) modal.hide();
-
-        // Clear the form
-
-        // refresh the list
         me.refreshIssues();
       } else {
         alert("Failed to save issue");
@@ -298,8 +278,7 @@ function issues() {
     const updateForm = document.getElementById("update-issue-form");
 
     updateForm.addEventListener("submit", async (e) => {
-      e.preventDefault(); // stop the refresh
-      // console.log("getting here");
+      e.preventDefault();
 
       // grab the NEW values from the modal inputs
       const id = document.getElementById("update-issue-id").value;
@@ -310,7 +289,7 @@ function issues() {
         neighborhood: document.getElementById("update-neighborhood").value,
       };
 
-      // pass the ID and the OBJECT to your method
+      // pass the ID and the OBJECT to method for updating the DB (event > route > DB > back to client)
       await me.updateIssue(id, updatedData);
     });
   };
@@ -326,7 +305,6 @@ function issues() {
       .getElementById("issue-category")
       ?.addEventListener("change", () => {
         me.refreshIssues();
-        // console.log("Changed category");
       });
 
     document.querySelectorAll(".issue-chip").forEach((btn) => {

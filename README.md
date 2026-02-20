@@ -180,7 +180,14 @@ boston_route_radar/
 
 #### [Demo]()
 
-The application design was informed by the work completed in Prof. Gomez's Course, as well as Bootstrap's card and carousel templates - adapted to create a clean, modern civic interface. Mockups for both the Issues page (scrollable card grid with status badges and action buttons) and the Projects page (dark-themed card grid for city priorities) were created during the design phase and presented as part of the CS5610 project slides.
+![Homepage Screenshot](assets/issues.png)
+_Clean, modern design for viewing transportation issues_
+
+![Add Issue](assets/add_issue.png)
+_Able to add new, update, delete, or filter issues_
+
+![Projects](assets/projects.png)
+_Projects allows city administrators similar functionality_
 
 ---
 
@@ -188,13 +195,21 @@ The application design was informed by the work completed in Prof. Gomez's Cours
 
 ### Creator Attributions
 
--- put them here --
+- [Logo](https://www.figma.com/community/file/1018477313212753754/hand-drawn-shapes)
+- [Bootstrap 5 UI Kit](https://www.figma.com/community/file/876022745968684318)
+- [Design Doc Example](https://docs.google.com/document/d/1Ec-meutJBaaw4cw0w6GMzTTqJfABBZgBzkpjO-1rq8E/edit?tab=t.ykzohr99uo7z)
+- [Presentation Example](https://docs.google.com/presentation/d/13cU8w33jNEzF5RX6STwZbzTthm9KhT3fNp5iPCyrMwk/edit?slide=id.g389c7506f58_0_1427#slide=id.g389c7506f58_0_1427) and previous presentation made by Logan Matheny
+- ApartmentFinder App created by Prof. Gomez served as main inspiration for layout
 
 ## 🤖 AI Assistance
 
-AI tools were used strategically throughout development to accelerate work and improve quality.
-
 ### How AI Was Used
+
+**Issues Usage** - A combination of Claude and Gemini were utilized in learning more about how NodeJS, MongoDB, and Express all work together. For more specific technical challenges, AI was used in some of the following examples:
+
+- Assistance with 'injecting' the cards correctly into the issues div element and preserve the correct dimension, rows, columns, etc...
+- Creating and utilizing the update modal
+- Understanding how and where to place event listeners on the buttons controlling update and delete. Should they get placed one time? During the creation of each card? etc...
 
 **README Documentation** — Claude AI was used to help structure and format this README based on project details and a preferred style from a prior project. The repository owners then made adjustments and modifications as necessary.
 
@@ -226,7 +241,7 @@ AI was used as a **development accelerator**, not a shortcut. All generated code
 
 - **Course**: CS5610 Web Development
 - **Semester**: Spring 2026
-- **Instructor**: John Guerra
+- **Instructor**: John Guerra Gomez
 - **Course Website**: [CS5610 Online Spring 2026](https://johnguerra.co/classes/webDevelopment_online_spring_2026/)
 
 ---
