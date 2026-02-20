@@ -67,6 +67,15 @@ Issues can be browsed with filters to show all community issues or just your own
 
 ---
 
+##Screenshots
+
+###Issues
+![issues landing page]](./assets/issues.png)
+![Add Issue Modal](./assets/add_issue.png)
+![Projects View](./assets/projects.png)
+![Projects View Modal](./assets/project_view_sc.png)
+![Projects delete Modal](./assets/project_delete_sc.png)
+
 ## 🔧 Tech Stack
 
 ### Backend
@@ -107,6 +116,8 @@ boston_route_radar/
 ---
 
 ## 💻 Installation
+
+Instructions on how to run the application
 
 ### Prerequisites
 
@@ -239,6 +250,7 @@ AI was used as a **development accelerator**, not a shortcut. All generated code
 - 🐙 [GitHub](https://github.com/pratyushajaitly)
 
 **Course Information**
+Class Link
 
 - **Course**: CS5610 Web Development
 - **Semester**: Spring 2026
