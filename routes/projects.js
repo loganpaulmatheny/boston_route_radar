@@ -20,13 +20,12 @@ router.get("/projects", async (req, res) => {
   try {
     const projects = await projectsDB.getAll();
 
-    // attach linked issue counts in one pass
     const client = connectRaw();
     await client.connect();
     try {
       const issues = client.db(DB_NAME).collection(ISSUES_COLLECTION);
 
-      const ids = projects.map((p) => p._id);
+      const ids = projects.map((p) => String(p._id));
 
       // aggregate counts by projectId
       const counts = await issues
@@ -90,7 +89,6 @@ router.put("/projects/:id", async (req, res) => {
       imageUrl: payload.imageUrl,
     };
 
-    // remove undefined keys
     Object.keys(patch).forEach(
       (k) => patch[k] === undefined && delete patch[k]
     );

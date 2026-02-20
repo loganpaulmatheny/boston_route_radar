@@ -120,7 +120,7 @@ function issues() {
 
       deleteBtn.addEventListener("click", async () => {
         const confirmDelete = confirm(
-          "Are you sure you want to delete this issue?",
+          "Are you sure you want to delete this issue?"
         );
 
         if (confirmDelete) {
@@ -136,6 +136,9 @@ function issues() {
         const descInput = document.getElementById("update-description");
         const catInput = document.getElementById("update-category");
         const neighInput = document.getElementById("update-neighborhood");
+
+        const projInput = document.getElementById("update-projectId");
+
         const upModal = document.getElementById("updateModal");
 
         // if it doesn't have an ID or the modal
@@ -150,6 +153,8 @@ function issues() {
         catInput.value = category;
         neighInput.value = neighborhood;
 
+        if (projInput) projInput.value = issue.projectId || "";
+
         // Use 'new' keyword and pass the element
         // Can't quite reuse the same modal
         const modal = new window.bootstrap.Modal(upModal);
@@ -158,6 +163,29 @@ function issues() {
 
       issuesDiv.appendChild(issueCard);
     }
+  };
+
+  me.setupUpdateListener = () => {
+    const updateForm = document.getElementById("update-issue-form");
+
+    updateForm.addEventListener("submit", async (e) => {
+      e.preventDefault(); // stop the refresh
+      // console.log("getting here");
+
+      // grab the NEW values from the modal inputs
+      const id = document.getElementById("update-issue-id").value;
+
+      const updatedData = {
+        issueText: document.getElementById("update-description").value,
+        category: document.getElementById("update-category").value,
+        neighborhood: document.getElementById("update-neighborhood").value,
+
+        projectId: document.getElementById("update-projectId")?.value || null,
+      };
+
+      // pass the ID and the OBJECT to your method
+      await me.updateIssue(id, updatedData);
+    });
   };
 
   me.refreshIssues = async () => {
@@ -172,7 +200,7 @@ function issues() {
     const statusFilter = activeChip !== "all" ? activeChip : "";
 
     const res = await fetch(
-      `/api/issues?page=${page}&pageSize=${pageSize}&query=${searchFilter}&neighborhood=${neighborhoodFilter}&category=${categoryFilter}&status=${statusFilter}`,
+      `/api/issues?page=${page}&pageSize=${pageSize}&query=${query}`
     );
 
     if (!res.ok) {
@@ -206,6 +234,7 @@ function issues() {
         category: document.getElementById("category").value,
         neighborhood: document.getElementById("neighborhood").value,
         reportedBy: "testUser",
+
         projectId: selectedProjectId || null,
       };
 
