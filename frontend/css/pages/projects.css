@@ -96,3 +96,92 @@
 .project-footer .btn {
   flex: 1;
 }
+
+/* View modal responsive sizing */
+.modal-card.modal-wide {
+  width: min(980px, 96vw);
+  max-height: min(86vh, 820px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* make modal content scroll when it gets tall */
+.modal-card.modal-wide .modal-body {
+  overflow: auto;
+  max-height: calc(min(86vh, 820px) - 72px); /* header space */
+}
+
+/* view fields */
+.view-field {
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+.view-field.small {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+}
+
+/* image defaults */
+.view-img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+/* medium screens */
+@media (max-width: 992px) {
+  .modal-card.modal-wide {
+    width: min(92vw, 880px);
+    max-height: 88vh;
+  }
+
+  .modal-card.modal-wide .modal-body {
+    max-height: calc(88vh - 72px);
+  }
+
+  .view-img {
+    height: 220px;
+  }
+}
+
+/* small screens: stack and tighten */
+@media (max-width: 768px) {
+  .modal-card.modal-wide {
+    width: 96vw;
+    max-height: 92vh;
+  }
+
+  .modal-card.modal-wide .modal-body {
+    padding: 16px;
+    max-height: calc(92vh - 72px);
+  }
+
+  .view-img {
+    height: 200px;
+  }
+}
+
+/* very small screens */
+@media (max-width: 420px) {
+  .modal-card.modal-wide .modal-body {
+    padding: 14px;
+  }
+
+  .view-field {
+    padding: 9px 10px;
+  }
+
+  .view-img {
+    height: 170px;
+  }
+}
