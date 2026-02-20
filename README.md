@@ -49,7 +49,7 @@ Create a practical civic tool that:
 
 ---
 
-## ✨ Features
+<h2 name="features"> ✨ Features
 
 ### Issues Tracker
 
