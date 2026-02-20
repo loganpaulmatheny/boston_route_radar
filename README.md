@@ -190,16 +190,7 @@ Instructions on how to run the application
 
 #### [Presentation](https://docs.google.com/presentation/d/1qXckxGZW3NcSI1Ku2qwDHa9Wfr39dWP4maF2xt38PYk/edit?usp=sharing)
 
-#### [Demo]()
-
-![Homepage Screenshot](assets/issues.png)
-_Clean, modern design for viewing transportation issues_
-
-![Add Issue](assets/add_issue.png)
-_Able to add new, update, delete, or filter issues_
-
-![Projects](assets/projects.png)
-_Projects allows city administrators similar functionality_
+#### [Demo](https://drive.google.com/file/d/1lQupgfu74Kh24C-vyDXEHLNM09D1QEbx/view?usp=sharing)
 
 ---
 
@@ -243,11 +234,13 @@ AI was used as a **development accelerator**, not a shortcut. All generated code
 - 🪖 West Point Graduate and U.S. Army Veteran
 - 💼 [LinkedIn](https://www.linkedin.com/in/logan-matheny/)
 - 🐙 [GitHub](https://github.com/loganpaulmatheny)
+- Predominantly focused on issues collection and functionality
 
 **Pratyusha Jaitly**
 
 - 🎓 Graduate Student, M.S. Computer Science — Northeastern University
 - 🐙 [GitHub](https://github.com/pratyushajaitly)
+- Predominantly focused on projects collection and functionality
 
 **Course Information**
 Class Link
