@@ -105,7 +105,7 @@ function issues() {
         <p class="reported-by">${reportedBy}</p>
         <div class="status-section">
           <p class="text-muted">Status: <strong>${status}</strong></p>
-          <small class="text-muted">Last Updated: ${modifiedAt}</small> 
+          <small class="text-muted">Last Updated: ${modifiedAt ? new Date(modifiedAt).toLocaleDateString() : "N/A"}</small>
           <br>
           <div class="d-flex justify-content-center align-items-center">
             <button class="btn btn-info m-3">Info</button>
