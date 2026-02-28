@@ -164,6 +164,8 @@ function issues() {
       issuesDiv.appendChild(issueCard);
     }
   };
+/**
+setupUpdateListener is defined twice and one occurrence can be removed as this is a code smell
 
   me.setupUpdateListener = () => {
     const updateForm = document.getElementById("update-issue-form");
@@ -186,7 +188,7 @@ function issues() {
       // pass the ID and the OBJECT to your method
       await me.updateIssue(id, updatedData);
     });
-  };
+  };**/
 
   me.refreshIssues = async () => {
     // Check the filterbar for any specifics
