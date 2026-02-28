@@ -105,7 +105,7 @@ function issues() {
         <p class="reported-by">${reportedBy}</p>
         <div class="status-section">
           <p class="text-muted">Status: <strong>${status}</strong></p>
-          <small class="text-muted">Last Updated: ${modifiedAt}</small> 
+          <small class="text-muted">Last Updated: ${modifiedAt ? new Date(modifiedAt).toLocaleDateString() : "N/A"}</small>
           <br>
           <div class="d-flex justify-content-center align-items-center">
             <button class="btn btn-info m-3">Info</button>
@@ -164,6 +164,8 @@ function issues() {
       issuesDiv.appendChild(issueCard);
     }
   };
+/**
+setupUpdateListener is defined twice and one occurrence can be removed as this is a code smell
 
   me.setupUpdateListener = () => {
     const updateForm = document.getElementById("update-issue-form");
@@ -186,7 +188,7 @@ function issues() {
       // pass the ID and the OBJECT to your method
       await me.updateIssue(id, updatedData);
     });
-  };
+  };**/
 
   me.refreshIssues = async () => {
     // Check the filterbar for any specifics
